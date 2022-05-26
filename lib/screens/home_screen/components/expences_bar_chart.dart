@@ -1,7 +1,8 @@
-import 'dart:math';
-
+import 'package:ezan_official/constants.dart';
+import 'package:ezan_official/providers/expences.dart';
 import 'package:ezan_official/size_config.dart';
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class ExpencesBarChart extends StatelessWidget {
   const ExpencesBarChart({Key? key}) : super(key: key);
@@ -24,7 +25,10 @@ class ExpencesBarChart extends StatelessWidget {
             const Spacer(),
             Container(
               alignment: Alignment.topRight,
-              padding: EdgeInsets.only(right: SizeConfig.width(20), top: SizeConfig.height(30)),
+              padding: EdgeInsets.only(
+                right: SizeConfig.width(20),
+                top: SizeConfig.height(30),
+              ),
               child: Text(
                 'نظرة عامة',
                 style: TextStyle(
@@ -43,16 +47,6 @@ class ExpencesBarChart extends StatelessWidget {
 class BarChart extends StatelessWidget {
   const BarChart({Key? key}) : super(key: key);
 
-  static const List<String> days = [
-    'الأحد',
-    'الإثنين',
-    'الثلاثاء',
-    'الأربعاء',
-    'الخميس',
-    'الجمعة',
-    'السبت',
-  ];
-
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -67,7 +61,7 @@ class BarChart extends StatelessWidget {
               (index) => Container(
                 margin: EdgeInsets.only(
                   top: SizeConfig.height(30),
-                  left: SizeConfig.width(20),
+                  left: SizeConfig.width(10),
                   right: SizeConfig.width(20),
                 ),
                 child: Row(
@@ -81,11 +75,11 @@ class BarChart extends StatelessWidget {
                         ),
                       ),
                     ),
-                    SizedBox(width: SizeConfig.width(16)),
+                    SizedBox(width: SizeConfig.width(10)),
                     SizedBox(
-                      width: 30,
+                      width: SizeConfig.width(40),
                       child: Text(
-                        '${(4 - index) * 100}',
+                        '${(4 - index) * 1000}',
                         textAlign: TextAlign.center,
                       ),
                     ),
@@ -108,20 +102,26 @@ class BarChart extends StatelessWidget {
                 children: [
                   SizeConfig.addVerticalSpace(15),
                   Text(
-                    days[index],
+                    daysNames[index],
                     style: TextStyle(
                       fontSize: SizeConfig.height(15),
                       color: const Color(0xFF7B7B7B),
                     ),
                   ),
                   SizeConfig.addVerticalSpace(15),
-                  Container(
-                    height: SizeConfig.height(Random().nextInt(200).toDouble()),
-                    width: SizeConfig.width(12),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(16),
-                      color: Colors.blueAccent,
-                    ),
+                  HookConsumer(
+                    builder: (context, ref, child) {
+                      final expences = ref.watch(expencesProvider);
+                      final expence = expences[index].toDouble() * (SizeConfig.height(185) / 4000);
+                      return Container(
+                        height: SizeConfig.height(expence),
+                        width: SizeConfig.width(12),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(16),
+                          color: Colors.blueAccent,
+                        ),
+                      );
+                    },
                   ),
                 ],
               ),

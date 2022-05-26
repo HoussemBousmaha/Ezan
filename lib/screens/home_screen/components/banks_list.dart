@@ -18,7 +18,8 @@ class BanksList extends ConsumerWidget {
       width: SizeConfig.width(270),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(20),
-        child: ListView.builder(
+        child: ListView.separated(
+          separatorBuilder: (context, index) => SizeConfig.addHorizontalSpace(20),
           physics: const BouncingScrollPhysics(),
           padding: EdgeInsets.symmetric(vertical: SizeConfig.height(5)),
           scrollDirection: Axis.horizontal,

@@ -13,35 +13,29 @@ class BankCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        SizedBox(width: SizeConfig.width(20)),
-        Material(
+    return Material(
+      borderRadius: BorderRadius.circular(20),
+      elevation: 5,
+      child: Container(
+        padding: EdgeInsets.symmetric(
+          horizontal: SizeConfig.width(10),
+          vertical: SizeConfig.height(10),
+        ),
+        height: SizeConfig.height(100),
+        width: SizeConfig.width(135),
+        decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
-          elevation: 5,
-          child: Container(
-            padding: EdgeInsets.symmetric(
-              horizontal: SizeConfig.width(10),
-              vertical: SizeConfig.height(10),
-            ),
-            height: SizeConfig.height(100),
-            width: SizeConfig.width(135),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-              color: Colors.white,
-            ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(20),
-              child: SvgPicture.asset(
-                bank.logoPath,
-                fit: BoxFit.fitWidth,
-                // height: 20,
-              ),
-            ),
+          color: Colors.white,
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(20),
+          child: SvgPicture.asset(
+            bank.logoPath,
+            fit: BoxFit.fitWidth,
+            // height: 20,
           ),
         ),
-      ],
+      ),
     );
   }
 }
