@@ -1,4 +1,5 @@
-import 'package:ezan_official/screens/home_screen/home_screen.dart';
+import 'package:ezan_official/constants.dart';
+import 'package:ezan_official/screens/screens_wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -17,33 +18,11 @@ class MyApp extends StatelessWidget {
       builder: (context, _) {
         return Directionality(
           textDirection: TextDirection.rtl,
-          child: _!,
+          child: _ ?? const ScreensWrapper(),
         );
       },
-      theme: ThemeData(
-        inputDecorationTheme: InputDecorationTheme(
-          floatingLabelBehavior: FloatingLabelBehavior.always,
-          floatingLabelStyle: const TextStyle(
-            color: Colors.black,
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-            borderSide: const BorderSide(
-              color: Colors.black,
-            ),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-            borderSide: const BorderSide(
-              color: Colors.grey,
-            ),
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-        ),
-      ),
-      home: const HomeScreen(),
+      theme: theme,
+      home: const ScreensWrapper(),
     );
   }
 }
