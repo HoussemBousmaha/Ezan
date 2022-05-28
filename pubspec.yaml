@@ -21,6 +21,7 @@ dependencies:
   sleek_circular_slider: ^2.0.1
   weekday_selector: ^1.1.0
   animations: ^2.0.3
+  google_fonts: ^3.0.1
 
 dev_dependencies:
   flutter_test:

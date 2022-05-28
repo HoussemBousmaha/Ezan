@@ -21,7 +21,9 @@ class BanksList extends ConsumerWidget {
         child: ListView.separated(
           separatorBuilder: (context, index) => SizeConfig.addHorizontalSpace(20),
           physics: const BouncingScrollPhysics(),
-          padding: EdgeInsets.symmetric(vertical: SizeConfig.height(5)),
+          padding: EdgeInsets.symmetric(
+            vertical: SizeConfig.height(5),
+          ),
           scrollDirection: Axis.horizontal,
           itemCount: banks.length,
           itemBuilder: (context, index) {

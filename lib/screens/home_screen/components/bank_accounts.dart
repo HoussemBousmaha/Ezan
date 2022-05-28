@@ -14,7 +14,9 @@ class BankAccounts extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: EdgeInsets.only(right: SizeConfig.width(40)),
+          padding: EdgeInsets.only(
+            right: SizeConfig.width(40),
+          ),
           child: Text(
             'الحسابات',
             style: TextStyle(

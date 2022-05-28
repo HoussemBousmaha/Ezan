@@ -73,7 +73,7 @@ class WeekDay extends StatelessWidget {
         style: TextStyle(
           color: isSelected ? Colors.white : Colors.blueAccent,
           fontWeight: FontWeight.bold,
-          fontSize: 15,
+          fontSize: SizeConfig.height(15),
         ),
       ),
     );

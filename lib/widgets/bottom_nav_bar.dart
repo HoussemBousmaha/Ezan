@@ -1,18 +1,28 @@
-import 'package:ezan_official/screens/home_screen/components/add_expence_bottom_sheet.dart';
+import 'package:ezan_official/screens/screens_wrapper.dart';
 import 'package:ezan_official/size_config.dart';
+import 'package:ezan_official/widgets/floating_action_add_button.dart';
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class BottomNavBar extends StatelessWidget {
+class BottomNavBar extends ConsumerWidget {
   const BottomNavBar({Key? key}) : super(key: key);
 
+  void goToScreen(WidgetRef ref, int screenIndex) {
+    ref.watch(screenIndexProvider.notifier).state = screenIndex;
+  }
+
+  bool isScreenSelected(WidgetRef ref, int screenIndex) {
+    return ref.watch(screenIndexProvider) == screenIndex;
+  }
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Stack(
       children: [
         SizedBox(
           height: SizeConfig.height(130),
           child: CustomPaint(
-            size: Size(SizeConfig.screenWidth, 80),
+            size: Size(SizeConfig.screenWidth, SizeConfig.height(50)),
             painter: NavBarCustomPainter(),
             child: Container(
               margin: EdgeInsets.only(top: SizeConfig.height(10)),
@@ -26,18 +36,24 @@ class BottomNavBar extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         GestureDetector(
-                          onTap: () {},
+                          onTap: () {
+                            goToScreen(ref, 0);
+                          },
                           child: Icon(
-                            Icons.home,
-                            color: Colors.blueAccent,
+                            isScreenSelected(ref, 0) ? Icons.home : Icons.home_outlined,
+                            color: isScreenSelected(ref, 0) ? Colors.blueAccent : Colors.grey,
                             size: SizeConfig.height(35),
                           ),
                         ),
                         GestureDetector(
-                          onTap: () {},
+                          onTap: () {
+                            goToScreen(ref, 1);
+                          },
                           child: Icon(
-                            Icons.account_balance_wallet,
-                            color: Colors.blueAccent,
+                            isScreenSelected(ref, 1)
+                                ? Icons.account_balance_wallet
+                                : Icons.account_balance_wallet_outlined,
+                            color: isScreenSelected(ref, 1) ? Colors.blueAccent : Colors.grey,
                             size: SizeConfig.height(35),
                           ),
                         ),
@@ -51,18 +67,22 @@ class BottomNavBar extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         GestureDetector(
-                          onTap: () {},
+                          onTap: () {
+                            goToScreen(ref, 2);
+                          },
                           child: Icon(
-                            Icons.assessment,
-                            color: Colors.blueAccent,
+                            isScreenSelected(ref, 2) ? Icons.assessment : Icons.assessment_outlined,
+                            color: isScreenSelected(ref, 2) ? Colors.blueAccent : Colors.grey,
                             size: SizeConfig.height(35),
                           ),
                         ),
                         GestureDetector(
-                          onTap: () {},
+                          onTap: () {
+                            goToScreen(ref, 3);
+                          },
                           child: Icon(
-                            Icons.settings,
-                            color: Colors.blueAccent,
+                            isScreenSelected(ref, 3) ? Icons.settings : Icons.settings_outlined,
+                            color: isScreenSelected(ref, 3) ? Colors.blueAccent : Colors.grey,
                             size: SizeConfig.height(35),
                           ),
                         ),
@@ -74,34 +94,7 @@ class BottomNavBar extends StatelessWidget {
             ),
           ),
         ),
-        Positioned(
-          bottom: 35,
-          left: 0,
-          right: 0,
-          child: GestureDetector(
-            onTap: () async {
-              await showModalBottomSheet(
-                context: context,
-                builder: (context) {
-                  return const AddExpenceBottomSheet();
-                },
-              );
-            },
-            child: Container(
-              height: SizeConfig.height(85),
-              decoration: const BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.blueAccent,
-              ),
-              alignment: Alignment.center,
-              child: Icon(
-                Icons.add,
-                color: Colors.white,
-                size: SizeConfig.height(50),
-              ),
-            ),
-          ),
-        ),
+        const FloatingActionAddButton(),
       ],
     );
   }

@@ -1,11 +1,12 @@
 import 'package:ezan_official/screens/home_screen/components/bank_accounts.dart';
 import 'package:ezan_official/screens/home_screen/components/expences_bar_chart.dart';
 import 'package:ezan_official/size_config.dart';
-import 'package:ezan_official/widgets/bottom_nav_bar.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
+
+  static const _physics = BouncingScrollPhysics();
 
   @override
   Widget build(BuildContext context) {
@@ -15,10 +16,11 @@ class HomeScreen extends StatelessWidget {
       body: SizedBox(
         width: double.infinity,
         child: SingleChildScrollView(
+          physics: _physics,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizeConfig.addVerticalSpace(100),
+              SizeConfig.addVerticalSpace(60),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: SizeConfig.width(30)),
                 child: Row(
@@ -52,7 +54,6 @@ class HomeScreen extends StatelessWidget {
           ),
         ),
       ),
-      bottomNavigationBar: const BottomNavBar(),
     );
   }
 }

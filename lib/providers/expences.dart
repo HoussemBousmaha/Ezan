@@ -1,7 +1,7 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class Expences extends StateNotifier<List<int>> {
-  Expences() : super([1000, 2000, 2500, 1500, 500, 200, 890]);
+  Expences() : super([1000, 2000, 2500, 1500, 500, 3500, 4000]);
 
   void modifyExpence(int day, int newAmount) {
     final newState = List.generate(

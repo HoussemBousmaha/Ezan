@@ -11,7 +11,7 @@ class ExpencesBarChart extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Container(
-        height: SizeConfig.height(352),
+        height: SizeConfig.height(380),
         width: SizeConfig.width(364),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(18),
@@ -49,86 +49,119 @@ class BarChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Positioned(
-          bottom: SizeConfig.width(45),
-          left: 0,
-          right: 0,
-          child: Column(
-            children: List.generate(
-              5,
-              (index) => Container(
-                margin: EdgeInsets.only(
-                  top: SizeConfig.height(30),
-                  left: SizeConfig.width(10),
-                  right: SizeConfig.width(20),
-                ),
-                child: Row(
-                  children: [
-                    ...List.generate(
-                      500 ~/ 10,
-                      (index) => Expanded(
-                        child: Container(
-                          color: index % 2 == 0 ? Colors.transparent : Colors.grey,
-                          height: 1,
-                        ),
-                      ),
-                    ),
-                    SizedBox(width: SizeConfig.width(10)),
-                    SizedBox(
-                      width: SizeConfig.width(40),
-                      child: Text(
-                        '${(4 - index) * 1000}',
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+    return SizedBox(
+      height: SizeConfig.height(300),
+      child: Stack(
+        children: const [
+          Grid(),
+          Bars(),
+        ],
+      ),
+    );
+  }
+}
+
+class Grid extends StatelessWidget {
+  const Grid({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+      bottom: SizeConfig.height(45),
+      left: 0,
+      right: 0,
+      child: Column(
+        children: List.generate(
+          5,
+          (index) => Container(
+            margin: EdgeInsets.only(
+              top: SizeConfig.height(30),
+              left: SizeConfig.width(10),
+              right: SizeConfig.width(20),
             ),
-          ),
-        ),
-        Container(
-          height: SizeConfig.height(260),
-          padding: EdgeInsets.only(left: SizeConfig.width(40)),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: List.generate(
-              7,
-              (index) => Column(
-                verticalDirection: VerticalDirection.up,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  SizeConfig.addVerticalSpace(15),
-                  Text(
-                    daysNames[index],
+            child: Row(
+              children: [
+                ...List.generate(
+                  500 ~/ 10,
+                  (index) => Expanded(
+                    child: Container(
+                      color: index % 2 == 0 ? Colors.transparent : Colors.grey,
+                      height: 1,
+                    ),
+                  ),
+                ),
+                SizedBox(width: SizeConfig.width(10)),
+                SizedBox(
+                  width: SizeConfig.width(40),
+                  child: Text(
+                    '${(4 - index) * 1000}',
                     style: TextStyle(
                       fontSize: SizeConfig.height(15),
-                      color: const Color(0xFF7B7B7B),
                     ),
+                    textAlign: TextAlign.center,
                   ),
-                  SizeConfig.addVerticalSpace(15),
-                  HookConsumer(
-                    builder: (context, ref, child) {
-                      final expences = ref.watch(expencesProvider);
-                      final expence = expences[index].toDouble() * (SizeConfig.height(185) / 4000);
-                      return Container(
-                        height: SizeConfig.height(expence),
-                        width: SizeConfig.width(12),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(16),
-                          color: Colors.blueAccent,
-                        ),
-                      );
-                    },
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),
-      ],
+      ),
+    );
+  }
+}
+
+class Bars extends StatelessWidget {
+  const Bars({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+      bottom: SizeConfig.height(20),
+      left: 0,
+      right: 0,
+      child: Container(
+        height: SizeConfig.height(260),
+        padding: EdgeInsets.only(left: SizeConfig.width(40)),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: List.generate(
+            7,
+            (index) => Column(
+              verticalDirection: VerticalDirection.up,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text(
+                  daysNames[index],
+                  style: TextStyle(
+                    fontSize: SizeConfig.height(15),
+                    color: const Color(0xFF7B7B7B),
+                  ),
+                ),
+                SizeConfig.addVerticalSpace(15),
+                HookConsumer(
+                  builder: (context, ref, child) {
+                    final expences = ref.watch(expencesProvider);
+                    // final expence = expences[index].toDouble() * (SizeConfig.height(150) / 4000);
+                    final expence = (expences[index] / 4000) * SizeConfig.height(53) * 4;
+                    return Container(
+                      height: SizeConfig.height(expence),
+                      width: SizeConfig.width(12),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(16),
+                        color: Colors.blueAccent,
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
