@@ -1,6 +1,7 @@
-import 'package:ezan_official/screens/loan_screen.dart/components/slider.dart';
-import 'package:ezan_official/screens/loan_screen.dart/components/success_dialog.dart';
+import 'package:ezan_official/screens/loan_screen/components/slider.dart';
+import 'package:ezan_official/screens/loan_screen/components/success_dialog.dart';
 import 'package:ezan_official/size_config.dart';
+import 'package:ezan_official/widgets/primary_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
@@ -29,7 +30,7 @@ class LoanScreen extends HookWidget {
           physics: _physics,
           child: Column(
             children: [
-              SizeConfig.addVerticalSpace(60),
+              SizeConfig.addVerticalSpace(50),
               SizedBox(
                 height: SizeConfig.height(200),
                 child: Image.asset(
@@ -47,27 +48,16 @@ class LoanScreen extends HookWidget {
                   ),
                 ),
               ),
+              SizeConfig.addVerticalSpace(40),
               const CustomSlider(),
-              GestureDetector(
-                onTap: () {
-                  showSuccessDialog(context);
-                },
-                child: Container(
-                  height: SizeConfig.height(60),
-                  width: SizeConfig.width(200),
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    color: Colors.blueAccent,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Text(
-                    'اسحب',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: SizeConfig.height(16),
-                    ),
-                  ),
+              SizeConfig.addVerticalSpace(40),
+              PrimaryButton(
+                text: 'اسحب',
+                onPressed: () => showSuccessDialog(context),
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: SizeConfig.height(25),
                 ),
               ),
             ],

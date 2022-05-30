@@ -11,7 +11,7 @@ class CustomSlider extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: SizeConfig.screenWidth * 0.7,
-      height: SizeConfig.height(400),
+      height: SizeConfig.height(300),
       child: SleekCircularSlider(
         innerWidget: (percentage) {
           return Container(
@@ -56,7 +56,7 @@ class CustomSlider extends StatelessWidget {
                   ),
                   SizeConfig.addVerticalSpace(20),
                   Text(
-                    '${percentage.roundToDouble()} ريال',
+                    '${percentage.toInt()} ريال',
                     style: TextStyle(
                       fontSize: SizeConfig.height(25),
                       fontWeight: FontWeight.bold,
