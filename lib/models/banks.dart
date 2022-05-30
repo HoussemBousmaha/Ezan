@@ -26,9 +26,9 @@ class Banks extends ChangeNotifier {
     Bank(
       logoPath: 'assets/logos/Mada.svg',
     ),
-    Bank(
-      logoPath: 'assets/logos/Saudi_Central.svg',
-    ),
+    // Bank(
+    //   logoPath: 'assets/logos/Saudi_Central.svg',
+    // ),
   ];
 
   List<Bank> get items => [..._items];
