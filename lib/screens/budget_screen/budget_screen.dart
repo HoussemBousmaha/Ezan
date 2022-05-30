@@ -51,6 +51,8 @@ class BudgetScreen extends StatelessWidget {
               SvgPicture.asset(
                 'assets/illustations/budget_illustation.svg',
                 fit: BoxFit.cover,
+                height: SizeConfig.screenWidth * 0.65,
+                width: SizeConfig.screenWidth * 0.65,
               ),
               SizeConfig.addVerticalSpace(40),
               Text(
@@ -96,7 +98,7 @@ class BudgetScreen extends StatelessWidget {
                   fontSize: SizeConfig.height(25),
                 ),
               ),
-              SizeConfig.addVerticalSpace(30),
+              SizeConfig.addVerticalSpace(50),
             ],
           ),
         ),
