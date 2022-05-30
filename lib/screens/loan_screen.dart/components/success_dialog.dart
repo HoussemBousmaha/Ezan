@@ -10,7 +10,7 @@ class SuccessDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return Dialog(
       child: Container(
-        height: SizeConfig.height(400),
+        height: SizeConfig.height(300),
         width: SizeConfig.width(200),
         decoration: BoxDecoration(
           color: Colors.white,
@@ -42,7 +42,7 @@ class SuccessDialog extends StatelessWidget {
                 color: Colors.black,
               ),
             ),
-            SizeConfig.addVerticalSpace(40),
+            SizeConfig.addVerticalSpace(50),
             GestureDetector(
               onTap: () {
                 Navigator.of(context).pop();
