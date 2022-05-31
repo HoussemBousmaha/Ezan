@@ -1,5 +1,5 @@
 import 'package:ezan_official/constants.dart';
-import 'package:ezan_official/screens/screens_wrapper.dart';
+import 'package:ezan_official/screens/navbar_screens_wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -19,11 +19,11 @@ class MyApp extends StatelessWidget {
       builder: (context, _) {
         return Directionality(
           textDirection: TextDirection.rtl,
-          child: _ ?? const ScreensWrapper(),
+          child: _ ?? const NavBarScreensWrapper(),
         );
       },
       theme: theme,
-      home: const ScreensWrapper(),
+      home: const NavBarScreensWrapper(),
     );
   }
 }

@@ -23,45 +23,43 @@ class LoanScreen extends HookWidget {
   Widget build(BuildContext context) {
     SizeConfig.init(context);
 
-    return Scaffold(
-      body: SizedBox(
-        width: double.infinity,
-        child: SingleChildScrollView(
-          physics: _physics,
-          child: Column(
-            children: [
-              SizeConfig.addVerticalSpace(50),
-              SizedBox(
-                height: SizeConfig.height(200),
-                child: Image.asset(
-                  'assets/logos/Ezan.png',
-                  fit: BoxFit.cover,
-                ),
+    return SizedBox(
+      width: double.infinity,
+      child: SingleChildScrollView(
+        physics: _physics,
+        child: Column(
+          children: [
+            SizeConfig.addVerticalSpace(50),
+            SizedBox(
+              height: SizeConfig.height(200),
+              child: Image.asset(
+                'assets/logos/Ezan.png',
+                fit: BoxFit.cover,
               ),
-              Padding(
-                padding: EdgeInsets.only(right: SizeConfig.width(20)),
-                child: Text(
-                  'خذ قروضا مصغرة بكل سهولة',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: SizeConfig.height(25),
-                  ),
-                ),
-              ),
-              SizeConfig.addVerticalSpace(40),
-              const CustomSlider(),
-              SizeConfig.addVerticalSpace(40),
-              PrimaryButton(
-                text: 'اسحب',
-                onPressed: () => showSuccessDialog(context),
+            ),
+            Padding(
+              padding: EdgeInsets.only(right: SizeConfig.width(20)),
+              child: Text(
+                'خذ قروضا مصغرة بكل سهولة',
                 style: TextStyle(
-                  color: Colors.white,
                   fontWeight: FontWeight.bold,
                   fontSize: SizeConfig.height(25),
                 ),
               ),
-            ],
-          ),
+            ),
+            SizeConfig.addVerticalSpace(40),
+            const CustomSlider(),
+            SizeConfig.addVerticalSpace(40),
+            PrimaryButton(
+              text: 'اسحب',
+              onPressed: () => showSuccessDialog(context),
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: SizeConfig.height(25),
+              ),
+            ),
+          ],
         ),
       ),
     );

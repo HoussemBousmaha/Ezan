@@ -1,4 +1,4 @@
-import 'package:ezan_official/screens/screens_wrapper.dart';
+import 'package:ezan_official/screens/navbar_screens_wrapper.dart';
 import 'package:ezan_official/size_config.dart';
 import 'package:ezan_official/widgets/floating_action_add_button.dart';
 import 'package:flutter/material.dart';
@@ -8,11 +8,11 @@ class BottomNavBar extends ConsumerWidget {
   const BottomNavBar({Key? key}) : super(key: key);
 
   void goToScreen(WidgetRef ref, int screenIndex) {
-    ref.watch(screenIndexProvider.notifier).state = screenIndex;
+    ref.watch(navBarScreensIndexProvider.notifier).state = screenIndex;
   }
 
   bool isScreenSelected(WidgetRef ref, int screenIndex) {
-    return ref.watch(screenIndexProvider) == screenIndex;
+    return ref.watch(navBarScreensIndexProvider) == screenIndex;
   }
 
   @override
