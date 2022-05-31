@@ -23,7 +23,7 @@ class ExpencesBarChart extends StatelessWidget {
           verticalDirection: VerticalDirection.up,
           children: [
             const BarChart(),
-            const Spacer(),
+            // const Spacer(),
             Container(
               alignment: Alignment.topRight,
               padding: EdgeInsets.only(
@@ -37,7 +37,7 @@ class ExpencesBarChart extends StatelessWidget {
                 ),
               ),
             ),
-            SizeConfig.addVerticalSpace(40),
+            SizeConfig.addVerticalSpace(20),
           ],
         ),
       ),
