@@ -1,5 +1,4 @@
 import 'package:animations/animations.dart';
-import 'package:ezan_official/screens/budget_screen/budget_screens_wrapper.dart';
 import 'package:ezan_official/screens/home_screen/home_screen.dart';
 import 'package:ezan_official/screens/loan_screen/loan_screen.dart';
 import 'package:ezan_official/size_config.dart';
@@ -17,7 +16,8 @@ class NavBarScreensWrapper extends HookConsumerWidget {
   static const screens = [
     HomeScreen(),
     LoanScreen(),
-    BudgetScreenWrapper(),
+    Scaffold(),
+    // BudgetScreenWrapper(),
     Scaffold(),
   ];
 
