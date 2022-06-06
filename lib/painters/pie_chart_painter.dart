@@ -18,7 +18,7 @@ class PieChartPainter extends CustomPainter {
     double startAngle = 0;
 
     for (var element in data) {
-      double sweepAngle = drawSector(element, canvas, rect, startAngle);
+      double sweepAngle = drawSector(element, canvas, rect, startAngle, size);
 
       startAngle += sweepAngle;
     }
@@ -86,12 +86,12 @@ class PieChartPainter extends CustomPainter {
     canvas.drawLine(center, point, linePaint);
   }
 
-  double drawSector(Category element, Canvas canvas, Rect rect, double startAngle) {
+  double drawSector(Category element, Canvas canvas, Rect rect, double startAngle, Size size) {
     Paint paint = Paint()
-      ..strokeWidth = 60
+      ..strokeWidth = size.height / 6
       ..strokeCap = StrokeCap.round
       ..style = PaintingStyle.stroke
-      ..color = element.color!;
+      ..color = element.color;
     final sweepAngle = element.amountPercentage * angle * math.pi / 180.0;
     canvas.drawArc(rect, startAngle, sweepAngle, false, paint);
     return sweepAngle;

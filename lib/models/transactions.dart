@@ -6,9 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_sms_inbox/flutter_sms_inbox.dart';
 
 class Transaction {
-  final int? id;
-  final String? name;
-  final DateTime? date;
+  final int id;
+  final String name;
+  final DateTime date;
   double? amount; // assigned from the sms message body using regexp.
   TransactionCategory? category;
   bool isIncome = false;
@@ -22,9 +22,9 @@ class Transaction {
 
   factory Transaction.smsToTransaction(SmsMessage message) {
     return Transaction(
-      id: message.id,
-      name: message.sender,
-      date: message.date,
+      id: message.id!,
+      name: message.sender!,
+      date: message.date!,
     );
   }
 }

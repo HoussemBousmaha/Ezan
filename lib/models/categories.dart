@@ -1,3 +1,4 @@
+import 'package:ezan_official/constants.dart';
 import 'package:ezan_official/models/transactions.dart';
 import 'package:ezan_official/providers/transactions_provider.dart';
 import 'package:flutter/material.dart';
@@ -12,48 +13,24 @@ enum TransactionCategory {
   travel,
 }
 
-const categoriesNames = {
-  TransactionCategory.bills: 'الفواتير',
-  TransactionCategory.cafes: 'المقاهي',
-  TransactionCategory.electronics: 'الالكترونيات',
-  TransactionCategory.restaurants: 'المطاعم',
-  TransactionCategory.shopping: 'التسوق',
-  TransactionCategory.travel: 'السفر و السياحة',
-};
-
-const categoriesColors = {
-  TransactionCategory.bills: Colors.blueAccent,
-  TransactionCategory.cafes: Colors.redAccent,
-  TransactionCategory.electronics: Colors.greenAccent,
-  TransactionCategory.restaurants: Colors.indigo,
-  TransactionCategory.shopping: Colors.amberAccent,
-  TransactionCategory.travel: Colors.purpleAccent,
-};
-
-final Map<TransactionCategory, double> categoriesPercentages = {
-  TransactionCategory.bills: 0.0,
-  TransactionCategory.cafes: 0.0,
-  TransactionCategory.electronics: 0.0,
-  TransactionCategory.restaurants: 0.0,
-  TransactionCategory.shopping: 0.0,
-  TransactionCategory.travel: 0.0,
-};
-
 class Category {
   final String name;
   double amountPercentage;
-  final ColorSwatch<int>? color;
+  final CustomIcon icon;
+  final Color color;
 
   Category({
     required this.name,
     this.amountPercentage = 0,
+    required this.icon,
     required this.color,
   });
 
   static Category fromTransaction(Transaction transaction) {
     return Category(
-      name: transaction.name!,
-      color: categoriesColors[transaction.category],
+      name: transaction.name,
+      color: categoriesColors[transaction.category]!,
+      icon: categoriesIcons[transaction.category]!,
     );
   }
 }
@@ -63,7 +40,8 @@ class Categories extends ChangeNotifier {
 
   List<Category> _items = [];
   List<Category> get items => [..._items];
-  double total = 0;
+  double _total = 0;
+  double get total => _total;
 
   Categories(this.ref);
 
@@ -72,13 +50,11 @@ class Categories extends ChangeNotifier {
     transactions.when(
       data: (transactions) {
         for (Transaction transaction in transactions) {
-          // log('category: ${transaction.category} - amount: ${transaction.amount}');
-          total += transaction.amount ?? 0.0;
+          _total += transaction.amount ?? 0.0;
         }
-        // log('total: $total');
+
         for (Transaction transaction in transactions) {
-          categoriesPercentages[transaction.category!] = categoriesPercentages[transaction.category!]! + transaction.amount! / (total * 1);
-          // log('percenrage of ${transaction.category!} = ${categoriesPercentages[transaction.category!]}');
+          categoriesPercentages[transaction.category!] = categoriesPercentages[transaction.category!]! + transaction.amount! / _total;
         }
         _items = List.generate(
           categoriesNames.length,
@@ -86,6 +62,7 @@ class Categories extends ChangeNotifier {
             name: categoriesNames.values.toList()[index],
             color: categoriesColors.values.toList()[index],
             amountPercentage: categoriesPercentages.values.toList()[index],
+            icon: categoriesIcons.values.toList()[index],
           ),
         );
       },

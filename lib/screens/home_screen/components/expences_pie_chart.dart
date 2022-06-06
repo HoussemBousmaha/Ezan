@@ -13,24 +13,29 @@ class ExpencesPieChart extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final categories = ref.watch(categoriesProvider);
 
-    return Column(
-      children: [
-        PieChart(categories: categories),
-        SizeConfig.addVerticalSpace(60),
-        Container(
-          padding: EdgeInsets.symmetric(horizontal: SizeConfig.width(20), vertical: SizeConfig.height(10)),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(20),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.blueAccent.withOpacity(0.2),
-                blurRadius: 2,
-                spreadRadius: 2,
-              ),
-            ],
+    return Container(
+      padding: EdgeInsets.only(
+        left: SizeConfig.width(20),
+        right: SizeConfig.width(20),
+        top: SizeConfig.height(40),
+        bottom: SizeConfig.height(10),
+      ),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.blueAccent.withOpacity(0.2),
+            blurRadius: 2,
+            spreadRadius: 2,
           ),
-          child: Wrap(
+        ],
+      ),
+      child: Column(
+        children: [
+          PieChart(categories: categories),
+          SizeConfig.addVerticalSpace(60),
+          Wrap(
             children: List.generate(
               categories.items.length,
               (index) => Padding(
@@ -40,11 +45,17 @@ class ExpencesPieChart extends HookConsumerWidget {
                   child: Row(
                     children: [
                       Container(
-                        height: 20,
-                        width: 20,
+                        height: SizeConfig.height(30),
+                        width: SizeConfig.height(30),
                         decoration: BoxDecoration(
-                          color: categories.items[index].color,
+                          color: categories.items[index].color.withOpacity(0.4),
                           shape: BoxShape.circle,
+                        ),
+                        alignment: Alignment.center,
+                        child: Icon(
+                          categories.items[index].icon.icon,
+                          size: SizeConfig.height(13),
+                          color: categories.items[index].icon.color,
                         ),
                       ),
                       SizeConfig.addHorizontalSpace(10),
@@ -61,8 +72,8 @@ class ExpencesPieChart extends HookConsumerWidget {
               ),
             ),
           ),
-        )
-      ],
+        ],
+      ),
     );
   }
 }
@@ -107,8 +118,8 @@ class _PieChartState extends State<PieChart> {
   Widget build(BuildContext context) {
     String total = widget.categories.total != 0.0 ? '${widget.categories.total.toStringAsFixed(2)} ريال' : '';
     return SizedBox(
-      height: MediaQuery.of(context).size.height * 0.35,
-      width: MediaQuery.of(context).size.height * 0.35,
+      height: MediaQuery.of(context).size.height * 0.2,
+      width: MediaQuery.of(context).size.height * 0.2,
       child: CustomPaint(
         painter: PieChartPainter(widget.categories.items, fullAngle),
         child: Container(
@@ -117,7 +128,7 @@ class _PieChartState extends State<PieChart> {
             total,
             style: const TextStyle(
               fontWeight: FontWeight.bold,
-              fontSize: 25,
+              fontSize: 15,
               color: Colors.black,
             ),
           ),
