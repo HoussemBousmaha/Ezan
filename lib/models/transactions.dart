@@ -1,3 +1,6 @@
+import 'dart:math';
+
+import 'package:ezan_official/models/categories.dart';
 import 'package:ezan_official/services/sms_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sms_inbox/flutter_sms_inbox.dart';
@@ -7,9 +10,8 @@ class Transaction {
   final String? name;
   final DateTime? date;
   double? amount; // assigned from the sms message body using regexp.
+  TransactionCategory? category;
   bool isIncome = false;
-
-  // String? category; // for later.
 
   Transaction({
     required this.id,
@@ -28,10 +30,13 @@ class Transaction {
 }
 
 class Transactions extends ChangeNotifier {
-  final _items = [];
-  List<Transaction> get allTransactions => [..._items];
+  List<Transaction> _items = [];
+  Future<List<Transaction>> get allTransactions async {
+    _items = await initTransactions();
+    return [..._items];
+  }
 
-  Future<List<Transaction>> get purchases async {
+  Future<List<Transaction>> initTransactions() async {
     final SmsService service = SmsService();
     final messages = await service.getSmsMessages();
 
@@ -44,6 +49,9 @@ class Transactions extends ChangeNotifier {
       final amount = double.parse(doubleRE.firstMatch(message.body!)?.group(0) ?? '0.0');
       final transaction = Transaction.smsToTransaction(message);
       transaction.amount = amount;
+      transaction.category = TransactionCategory.values[Random().nextInt(
+        TransactionCategory.values.length,
+      )];
       return transaction;
     }).toList();
 
