@@ -17,12 +17,12 @@ class Bank {
 
 class Banks extends ChangeNotifier {
   final _items = [
-    Bank(
-      logoPath: 'assets/logos/Al_Rajhi.svg',
-    ),
-    Bank(
-      logoPath: 'assets/logos/Stc_Pay.svg',
-    ),
+    // Bank(
+    //   logoPath: 'assets/logos/Al_Rajhi.svg',
+    // ),
+    // Bank(
+    //   logoPath: 'assets/logos/Stc_Pay.svg',
+    // ),
     Bank(
       logoPath: 'assets/logos/Mada.svg',
     ),
