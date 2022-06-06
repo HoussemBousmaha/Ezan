@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:ezan_official/models/categories.dart';
 import 'package:ezan_official/painters/pie_chart_painter.dart';
+import 'package:ezan_official/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -12,20 +13,70 @@ class ExpencesPieChart extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final categories = ref.watch(categoriesProvider);
 
-    return PieChart(categories: categories);
+    return Column(
+      children: [
+        PieChart(categories: categories),
+        SizeConfig.addVerticalSpace(60),
+        Container(
+          padding: EdgeInsets.symmetric(horizontal: SizeConfig.width(20), vertical: SizeConfig.height(10)),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(20),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.blueAccent.withOpacity(0.2),
+                blurRadius: 2,
+                spreadRadius: 2,
+              ),
+            ],
+          ),
+          child: Wrap(
+            children: List.generate(
+              categories.items.length,
+              (index) => Padding(
+                padding: EdgeInsets.symmetric(vertical: SizeConfig.height(10)),
+                child: SizedBox(
+                  width: SizeConfig.width(170),
+                  child: Row(
+                    children: [
+                      Container(
+                        height: 20,
+                        width: 20,
+                        decoration: BoxDecoration(
+                          color: categories.items[index].color,
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                      SizeConfig.addHorizontalSpace(10),
+                      Column(
+                        children: [
+                          Text(
+                            '${categories.items[index].name} ${(categories.items[index].amountPercentage * 100).toStringAsFixed(1)}%',
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        )
+      ],
+    );
   }
 }
 
-class PieChart extends StatefulHookConsumerWidget {
+class PieChart extends StatefulWidget {
   const PieChart({Key? key, required this.categories}) : super(key: key);
 
   final Categories categories;
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _PieChartState();
+  State<PieChart> createState() => _PieChartState();
 }
 
-class _PieChartState extends ConsumerState<PieChart> {
+class _PieChartState extends State<PieChart> {
   late final Timer timer;
 
   double fullAngle = 0.0;
