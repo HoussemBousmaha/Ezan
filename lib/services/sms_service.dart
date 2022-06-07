@@ -8,7 +8,8 @@ class SmsService {
     final permission = await Permission.sms.status;
 
     if (permission.isGranted) {
-      return await query.querySms(count: smsCount);
+      final sms = await query.querySms(count: smsCount);
+      return sms;
     } else {
       await Permission.sms.request();
       return [];

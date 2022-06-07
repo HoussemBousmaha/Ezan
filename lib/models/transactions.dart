@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:ezan_official/models/categories.dart';
 import 'package:ezan_official/services/sms_service.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_sms_inbox/flutter_sms_inbox.dart';
 
 class Transaction {
@@ -29,14 +28,8 @@ class Transaction {
   }
 }
 
-class Transactions extends ChangeNotifier {
-  List<Transaction> _items = [];
-  Future<List<Transaction>> get allTransactions async {
-    _items = await initTransactions();
-    return [..._items];
-  }
-
-  Future<List<Transaction>> initTransactions() async {
+class Transactions {
+  static Future<List<Transaction>> fetchTransactions() async {
     final SmsService service = SmsService();
     final messages = await service.getSmsMessages();
 

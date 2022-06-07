@@ -1,6 +1,7 @@
+// ignore_for_file: unused_local_variable
+
 import 'package:ezan_official/constants.dart';
 import 'package:ezan_official/models/transactions.dart';
-import 'package:ezan_official/providers/transactions_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -15,13 +16,13 @@ enum TransactionCategory {
 
 class Category {
   final String name;
-  double amountPercentage;
+  double amount;
   final CustomIcon icon;
   final Color color;
 
   Category({
     required this.name,
-    this.amountPercentage = 0,
+    this.amount = 0,
     required this.icon,
     required this.color,
   });
@@ -36,46 +37,47 @@ class Category {
 }
 
 class Categories extends ChangeNotifier {
-  final ChangeNotifierProviderRef ref;
+  Future<double> getTotal() async {
+    final transactions = await Transactions.fetchTransactions();
+    double total = 0;
+    for (Transaction transaction in transactions) {
+      total += transaction.amount ?? 0.0;
+    }
 
-  List<Category> _items = [];
-  List<Category> get items => [..._items];
-  double _total = 0;
-  double get total => _total;
+    return total;
+  }
 
-  Categories(this.ref);
+  Future<List<Category>> getCategories() async {
+    final transactions = await Transactions.fetchTransactions();
 
-  Future<void> calculatePercentages() async {
-    final transactions = ref.watch(allTransactionsProvider);
-    transactions.when(
-      data: (transactions) {
-        for (Transaction transaction in transactions) {
-          _total += transaction.amount ?? 0.0;
-        }
+    List<Category> items = [];
+    final total = await getTotal();
 
-        for (Transaction transaction in transactions) {
-          categoriesPercentages[transaction.category!] = categoriesPercentages[transaction.category!]! + transaction.amount! / _total;
-        }
-        _items = List.generate(
-          categoriesNames.length,
-          (index) => Category(
-            name: categoriesNames.values.toList()[index],
-            color: categoriesColors.values.toList()[index],
-            amountPercentage: categoriesPercentages.values.toList()[index],
-            icon: categoriesIcons.values.toList()[index],
-          ),
-        );
-      },
-      error: (e, s) => null,
-      loading: () => null,
+    final Map<TransactionCategory, double> categoriesAmounts = {
+      TransactionCategory.bills: 0.0,
+      TransactionCategory.cafes: 0.0,
+      TransactionCategory.electronics: 0.0,
+      TransactionCategory.restaurants: 0.0,
+      TransactionCategory.shopping: 0.0,
+      TransactionCategory.travel: 0.0,
+    };
+
+    for (Transaction transaction in transactions) {
+      categoriesAmounts[transaction.category!] = categoriesAmounts[transaction.category!]! + transaction.amount!;
+    }
+    items = List.generate(
+      categoriesNames.length,
+      (index) => Category(
+        name: categoriesNames.values.toList()[index],
+        color: categoriesColors.values.toList()[index],
+        amount: categoriesAmounts.values.toList()[index],
+        icon: categoriesIcons.values.toList()[index],
+      ),
     );
+    return items;
   }
 }
 
 final categoriesProvider = ChangeNotifierProvider(
-  (ref) {
-    final categories = Categories(ref);
-    categories.calculatePercentages();
-    return categories;
-  },
+  (ref) => Categories(),
 );

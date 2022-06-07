@@ -1,7 +1,7 @@
 // ignore_for_file: avoid_print
 
 import 'package:ezan_official/screens/home_screen/components/bank_accounts.dart';
-import 'package:ezan_official/screens/home_screen/components/expences_pie_chart.dart';
+import 'package:ezan_official/screens/home_screen/components/expences_wrapper.dart';
 import 'package:ezan_official/size_config.dart';
 import 'package:flutter/material.dart';
 
@@ -13,10 +13,10 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SizeConfig.init(context);
-    return SizedBox(
-      width: double.infinity,
-      child: SingleChildScrollView(
-        physics: _physics,
+    return SingleChildScrollView(
+      physics: _physics,
+      child: SizedBox(
+        width: double.infinity,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -48,7 +48,8 @@ class HomeScreen extends StatelessWidget {
             SizeConfig.addVerticalSpace(45),
             const BankAccounts(),
             SizeConfig.addVerticalSpace(80),
-            const ExpencesPieChart(),
+            const ExpencesWrapper(),
+            // const BarChart(),
             SizeConfig.addVerticalSpace(200),
           ],
         ),

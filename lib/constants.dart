@@ -12,6 +12,15 @@ const daysNames = [
   'الجمعة',
   'السبت',
 ];
+final Map<String, String> englishToArabic = {
+  'Sunday': 'الأحد',
+  'Monday': 'الإثنين',
+  'Tuesday': 'الثلاثاء',
+  'Wednesday': 'الأربعاء',
+  'Thursday': 'الخميس',
+  'Friday': 'الجمعة',
+  'Saturday': 'السبت',
+};
 
 final ThemeData theme = ThemeData(
   textTheme: GoogleFonts.madaTextTheme(),
@@ -46,15 +55,6 @@ final Map<TransactionCategory, Color> categoriesColors = {
   TransactionCategory.restaurants: Colors.indigoAccent,
   TransactionCategory.shopping: Colors.amberAccent,
   TransactionCategory.travel: Colors.purpleAccent,
-};
-
-final Map<TransactionCategory, double> categoriesPercentages = {
-  TransactionCategory.bills: 0.0,
-  TransactionCategory.cafes: 0.0,
-  TransactionCategory.electronics: 0.0,
-  TransactionCategory.restaurants: 0.0,
-  TransactionCategory.shopping: 0.0,
-  TransactionCategory.travel: 0.0,
 };
 
 class CustomIcon {

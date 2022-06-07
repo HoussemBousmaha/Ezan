@@ -6,10 +6,11 @@ import 'dart:math' as math;
 final midPaint = Paint()..color = Colors.white;
 
 class PieChartPainter extends CustomPainter {
-  final List<Category> data;
+  final List<Category> categories;
+  final double total;
   final double angle;
 
-  PieChartPainter(this.data, this.angle);
+  PieChartPainter(this.categories, this.total, this.angle);
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -17,8 +18,8 @@ class PieChartPainter extends CustomPainter {
 
     double startAngle = 0;
 
-    for (var element in data) {
-      double sweepAngle = drawSector(element, canvas, rect, startAngle, size);
+    for (var category in categories) {
+      double sweepAngle = drawSector(category, canvas, rect, startAngle, size);
 
       startAngle += sweepAngle;
     }
@@ -86,13 +87,13 @@ class PieChartPainter extends CustomPainter {
     canvas.drawLine(center, point, linePaint);
   }
 
-  double drawSector(Category element, Canvas canvas, Rect rect, double startAngle, Size size) {
+  double drawSector(Category category, Canvas canvas, Rect rect, double startAngle, Size size) {
     Paint paint = Paint()
       ..strokeWidth = size.height / 6
       ..strokeCap = StrokeCap.round
       ..style = PaintingStyle.stroke
-      ..color = element.color;
-    final sweepAngle = element.amountPercentage * angle * math.pi / 180.0;
+      ..color = category.color;
+    final sweepAngle = category.amount / total * angle * math.pi / 180.0;
     canvas.drawArc(rect, startAngle, sweepAngle, false, paint);
     return sweepAngle;
   }

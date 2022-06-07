@@ -1,222 +1,99 @@
-// import 'package:ezan_official/constants.dart';
-// import 'package:ezan_official/providers/expences.dart';
-// import 'package:ezan_official/size_config.dart';
-// import 'package:flutter/material.dart';
-// import 'package:flutter_hooks/flutter_hooks.dart';
-// import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'dart:math' as math;
 
-// class ExpencesBarChart extends StatelessWidget {
-//   const ExpencesBarChart({Key? key}) : super(key: key);
+import 'package:ezan_official/models/bar_chart_days.dart';
+import 'package:ezan_official/models/categories.dart';
+import 'package:ezan_official/painters/bar_chart_painter.dart';
+import 'package:ezan_official/size_config.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return Center(
-//       child: Container(
-//         height: SizeConfig.height(380),
-//         width: SizeConfig.width(364),
-//         decoration: BoxDecoration(
-//           borderRadius: BorderRadius.circular(18),
-//           color: Colors.white,
-//         ),
-//         child: Column(
-//           crossAxisAlignment: CrossAxisAlignment.start,
-//           verticalDirection: VerticalDirection.up,
-//           children: [
-//             const BarChart(),
-//             // const Spacer(),
-//             Container(
-//               alignment: Alignment.topRight,
-//               padding: EdgeInsets.only(
-//                 right: SizeConfig.width(20),
-//               ),
-//               child: Text(
-//                 'نظرة عامة',
-//                 style: TextStyle(
-//                   fontWeight: FontWeight.bold,
-//                   fontSize: SizeConfig.height(30),
-//                 ),
-//               ),
-//             ),
-//             SizeConfig.addVerticalSpace(20),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
+class ExpencesBarChart extends StatefulWidget {
+  const ExpencesBarChart({Key? key, required this.items, required this.total}) : super(key: key);
 
-// class BarChart extends StatelessWidget {
-//   const BarChart({Key? key}) : super(key: key);
+  final List<Category> items;
+  final double total;
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return SizedBox(
-//       height: SizeConfig.height(300),
-//       child: Stack(
-//         children: const [
-//           Grid(),
-//           Bars(),
-//         ],
-//       ),
-//     );
-//   }
-// }
+  @override
+  State<ExpencesBarChart> createState() => _ExpencesBarChartState();
+}
 
-// class Grid extends StatelessWidget {
-//   const Grid({
-//     Key? key,
-//   }) : super(key: key);
+class _ExpencesBarChartState extends State<ExpencesBarChart> with SingleTickerProviderStateMixin {
+  late final AnimationController controller;
+  late final Animation animation;
+  late final double itemMax;
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return Positioned(
-//       bottom: SizeConfig.height(45),
-//       left: 0,
-//       right: 0,
-//       child: Column(
-//         children: List.generate(
-//           5,
-//           (index) => Container(
-//             margin: EdgeInsets.only(
-//               top: SizeConfig.height(30),
-//               left: SizeConfig.width(10),
-//               right: SizeConfig.width(10),
-//             ),
-//             child: Row(
-//               children: [
-//                 ...List.generate(
-//                   500 ~/ 10,
-//                   (index) => Expanded(
-//                     child: Container(
-//                       color: index % 2 == 0 ? null : Colors.grey,
-//                       height: 1,
-//                     ),
-//                   ),
-//                 ),
-//                 SizedBox(width: SizeConfig.width(13)),
-//                 SizedBox(
-//                   width: SizeConfig.width(40),
-//                   child: Text(
-//                     '${(4 - index) * 1000}',
-//                     style: TextStyle(
-//                       fontSize: SizeConfig.height(15),
-//                       fontWeight: FontWeight.bold,
-//                     ),
-//                     textAlign: TextAlign.center,
-//                   ),
-//                 ),
-//               ],
-//             ),
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
+  @override
+  void initState() {
+    super.initState();
+    itemMax = getMax(widget.items);
+    controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 2000),
+    )..addListener(() {
+        setState(() {});
+      });
+    animation = CurvedAnimation(parent: controller, curve: Curves.elasticInOut);
+    controller.forward();
+  }
 
-// class Bars extends HookConsumerWidget {
-//   const Bars({
-//     Key? key,
-//   }) : super(key: key);
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
 
-//   static const _physics = BouncingScrollPhysics();
+  double getMax(List<Category> items) {
+    double itemMax = 0.0;
+    for (var item in items) {
+      itemMax = math.max(itemMax, item.amount);
+    }
 
-//   @override
-//   Widget build(BuildContext context, WidgetRef ref) {
-//     return Positioned(
-//       bottom: SizeConfig.height(20),
-//       left: 0,
-//       right: 0,
-//       child: Container(
-//         height: SizeConfig.height(280),
-//         padding: EdgeInsets.only(left: SizeConfig.width(40)),
-//         child: SingleChildScrollView(
-//           physics: _physics,
-//           scrollDirection: Axis.horizontal,
-//           child: Row(
-//             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//             children: List.generate(
-//               7,
-//               (index) => HookConsumer(
-//                 builder: ((context, ref, child) {
-//                   final isHoveringNotifier = useState(false);
-//                   final expences = ref.watch(expencesProvider);
-//                   final expence = (expences[index] / 4000) * SizeConfig.height(49.5 * 4);
-//                   return SizedBox(
-//                     width: SizeConfig.width(60),
-//                     child: Stack(
-//                       alignment: Alignment.center,
-//                       children: [
-//                         GestureDetector(
-//                           onTap: () {
-//                             isHoveringNotifier.value = !isHoveringNotifier.value;
-//                           },
-//                           child: Column(
-//                             verticalDirection: VerticalDirection.up,
-//                             mainAxisAlignment: MainAxisAlignment.start,
-//                             children: [
-//                               Text(
-//                                 daysNames[index],
-//                                 style: TextStyle(
-//                                   fontSize: SizeConfig.height(14),
-//                                   color: const Color(0xFF7B7B7B),
-//                                 ),
-//                               ),
-//                               AnimatedContainer(
-//                                 duration: const Duration(milliseconds: 200),
-//                                 height: isHoveringNotifier.value ? 20 : 15,
-//                               ),
-//                               HookConsumer(
-//                                 builder: (context, ref, child) {
-//                                   return Container(
-//                                     height: expence,
-//                                     width: SizeConfig.width(12),
-//                                     decoration: BoxDecoration(
-//                                       borderRadius: BorderRadius.circular(16),
-//                                       color: Colors.blueAccent,
-//                                     ),
-//                                   );
-//                                 },
-//                               ),
-//                               SizeConfig.addVerticalSpace(15),
-//                             ],
-//                           ),
-//                         ),
-//                         Positioned(
-//                           bottom: SizeConfig.height(expence + 60),
-//                           left: 0,
-//                           right: 0,
-//                           child: AnimatedOpacity(
-//                             opacity: isHoveringNotifier.value ? 1 : 0,
-//                             duration: const Duration(milliseconds: 200),
-//                             child: Container(
-//                               height: SizeConfig.height(30),
-//                               // width: SizeConfig.width(100),
-//                               alignment: Alignment.center,
-//                               decoration: BoxDecoration(
-//                                 borderRadius: BorderRadius.circular(12),
-//                                 color: Colors.black54,
-//                               ),
-//                               child: Text(
-//                                 '${expences[index].toStringAsFixed(1)} ريال',
-//                                 style: TextStyle(
-//                                   color: Colors.white,
-//                                   fontSize: SizeConfig.height(13),
-//                                   fontWeight: FontWeight.bold,
-//                                 ),
-//                               ),
-//                             ),
-//                           ),
-//                         ),
-//                       ],
-//                     ),
-//                   );
-//                 }),
-//               ),
-//             ),
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
+    return itemMax;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: SizeConfig.screenWidth * 0.6,
+      width: SizeConfig.screenWidth * 0.6,
+      child: CustomPaint(
+        painter: BarChartPainter(widget.items, widget.total, animation.value),
+      ),
+    );
+  }
+}
+
+class BarChart extends HookConsumerWidget {
+  const BarChart({
+    Key? key,
+    required this.items,
+  }) : super(key: key);
+
+  final List<Day> items;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final controller = useAnimationController(duration: const Duration(milliseconds: 1000));
+    final percentage = useState(0.0);
+
+    useEffect(() {
+      final animation = CurvedAnimation(parent: controller, curve: Curves.bounceOut);
+      controller.addListener(() {
+        percentage.value = animation.value;
+      });
+      controller.forward();
+
+      return null;
+    }, [controller]);
+
+    return SizedBox(
+      height: SizeConfig.screenWidth * 0.8,
+      width: SizeConfig.screenWidth * 0.8,
+      child: CustomPaint(
+        size: Size(SizeConfig.screenWidth * 0.8, SizeConfig.screenWidth * 0.8),
+        painter: BarsPainter(items, percentage.value),
+      ),
+    );
+  }
+}
