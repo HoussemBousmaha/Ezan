@@ -38,6 +38,6 @@ class Days {
       }
     }
 
-    return days;
+    return days.reversed.toList();
   }
 }

@@ -34,7 +34,7 @@ class Transactions {
     final messages = await service.getSmsMessages();
 
     final filteredTransactions = messages.where((message) {
-      return message.body!.contains('PoS Purchase');
+      return message.body!.contains('PoS Purchase') || message.body!.contains('شراء عبر نقاط البيع');
     }).toList();
 
     final purchases = filteredTransactions.map((message) {

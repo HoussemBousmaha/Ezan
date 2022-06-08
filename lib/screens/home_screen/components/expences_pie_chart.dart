@@ -2,8 +2,9 @@ import 'package:ezan_official/models/categories.dart';
 import 'package:ezan_official/painters/pie_chart_painter.dart';
 import 'package:ezan_official/size_config.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 
-class ExpencesPieChart extends StatefulWidget {
+class ExpencesPieChart extends HookWidget {
   const ExpencesPieChart({
     Key? key,
     required this.items,
@@ -14,57 +15,60 @@ class ExpencesPieChart extends StatefulWidget {
   final double total;
 
   @override
-  State<ExpencesPieChart> createState() => _ExpencesPieChartState();
+  Widget build(BuildContext context) {
+    final controller = useAnimationController(duration: const Duration(milliseconds: 2000));
+    // late final Animation<double> animation;
+    final curvedAnimation = CurvedAnimation(parent: controller, curve: Curves.bounceOut);
+    final animation = Tween<double>(begin: 0.0, end: 360).animate(curvedAnimation);
+
+    useEffect(() {
+      controller.forward();
+
+      return null;
+    }, [controller]);
+
+    return PieChartTransition(angle: animation, items: items, total: total);
+  }
 }
 
-class _ExpencesPieChartState extends State<ExpencesPieChart> with SingleTickerProviderStateMixin {
-  late final AnimationController controller;
-  late final Animation animation;
-  late final double itemMax;
+class PieChartTransition extends StatelessWidget {
+  const PieChartTransition({
+    Key? key,
+    required this.angle,
+    required this.items,
+    required this.total,
+  }) : super(key: key);
 
-  @override
-  void initState() {
-    super.initState();
-
-    itemMax = 360;
-    controller = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 1000),
-    )..addListener(() {
-        setState(() {});
-      });
-
-    animation = CurvedAnimation(parent: controller, curve: Curves.bounceOut);
-    controller.forward();
-  }
-
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
+  final List<Category> items;
+  final double total;
+  final Animation<double> angle;
 
   @override
   Widget build(BuildContext context) {
-    String totalTitle = widget.total != 0.0 ? '${widget.total.toStringAsFixed(2)} ريال' : '';
-
-    return SizedBox(
-      height: SizeConfig.screenWidth * 0.6,
-      width: SizeConfig.screenWidth * 0.6,
-      child: CustomPaint(
-        painter: PieChartPainter(widget.items, widget.total, animation.value * itemMax),
-        child: Container(
-          alignment: Alignment.center,
-          child: Text(
-            totalTitle,
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 15,
-              color: Colors.black,
+    String totalTitle = total != 0.0 ? '${total.toStringAsFixed(2)} ريال' : '';
+    return AnimatedBuilder(
+      animation: angle,
+      builder: (context, child) {
+        return Container(
+          height: SizeConfig.screenWidth * 0.9,
+          width: SizeConfig.screenWidth * 0.9,
+          padding: const EdgeInsets.all(30),
+          child: CustomPaint(
+            painter: PieChartPainter(items, total, angle.value),
+            child: Container(
+              alignment: Alignment.center,
+              child: Text(
+                totalTitle,
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 15,
+                  color: Colors.black,
+                ),
+              ),
             ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }

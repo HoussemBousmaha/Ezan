@@ -15,65 +15,49 @@ class ExpencesWrapper extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final categoriesData = ref.watch(categoriesProvider);
     final daysData = ref.watch(daysProvider);
-    final itemsFuture = useMemoized(categoriesData.getCategories);
-    final items = useFuture(itemsFuture);
+    final categoriesFuture = useMemoized(categoriesData.getCategories);
+    final categories = useFuture(categoriesFuture);
     final totalFuture = useMemoized(categoriesData.getTotal);
     final total = useFuture(totalFuture);
     final daysFuture = useMemoized(daysData.getDayAmountSpent);
     final days = useFuture(daysFuture);
-    final isLoaded = items.hasData && total.hasData;
+    final isLoaded = categories.hasData && total.hasData && days.hasData;
 
-    final isPie = useState(true);
-    final done = useState(true);
+    final showPieChartNotifier = useState(true);
 
-    return IgnorePointer(
-      ignoring: isPie.value && !done.value || false,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 1000),
-        curve: Curves.bounceOut,
-        height: SizeConfig.screenHeight * (isPie.value ? 0.58 : 0.43),
-        width: SizeConfig.screenWidth * 0.9,
-        padding: EdgeInsets.only(
-          top: SizeConfig.height(40),
-          bottom: SizeConfig.height(10),
-        ),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(20),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.blueAccent.withOpacity(0.2),
-              blurRadius: 2,
-              spreadRadius: 2,
-            ),
-          ],
-        ),
-        child: Column(
-          children: [
-            isLoaded
-                ? GestureDetector(
-                    onTap: () async {
-                      if (!isPie.value) {
-                        isPie.value = true;
-                        await Future.delayed(const Duration(milliseconds: 750));
-                        done.value = !done.value;
-                      } else {
-                        done.value = false;
-                        isPie.value = false;
-                      }
-                    },
-                    child: !isPie.value ? BarChart(items: days.data!) : ExpencesPieChart(items: items.data!, total: total.data!),
-                  )
-                : Container(
-                    alignment: Alignment.center,
-                    height: SizeConfig.screenWidth * 0.6,
-                    width: SizeConfig.screenWidth * 0.6,
-                    child: const CircularProgressIndicator(),
-                  ),
-            if (isLoaded && isPie.value && done.value) SizeConfig.addVerticalSpace(60),
-            if (isLoaded && isPie.value && done.value) ChartsCategories(items: items.data!, total: total.data!),
-          ],
-        ),
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 200),
+      curve: Curves.ease,
+      alignment: Alignment.center,
+      // height: SizeConfig.screenHeight * (showPieChartNotifier.value ? .35 : .43),
+      width: SizeConfig.screenWidth * 0.9,
+      // padding: EdgeInsets.only(top: SizeConfig.height(40)),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 0, spreadRadius: 1)],
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          isLoaded
+              ? GestureDetector(
+                  onTap: () async {
+                    showPieChartNotifier.value = !showPieChartNotifier.value;
+                  },
+                  child: !showPieChartNotifier.value
+                      ? ExpencesBarChart(items: days.data!)
+                      : ExpencesPieChart(items: categories.data!, total: total.data!),
+                )
+              : Container(
+                  alignment: Alignment.center,
+                  height: SizeConfig.screenWidth * 0.6,
+                  width: SizeConfig.screenWidth * 0.6,
+                  child: const CircularProgressIndicator(),
+                ),
+          // if (showPieChartNotifier.value) SizeConfig.addVerticalSpace(60),
+          if (isLoaded && showPieChartNotifier.value) ChartsCategories(items: categories.data!, total: total.data!),
+        ],
       ),
     );
   }

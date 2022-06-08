@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:math' as math;
 import 'package:ezan_official/constants.dart';
 import 'package:ezan_official/models/bar_chart_days.dart';
@@ -44,150 +46,125 @@ class BarChartPainter extends CustomPainter {
 }
 
 class BarsPainter extends CustomPainter {
-  final List<Day> days;
+  List<Day> days;
   final double percentage;
 
   BarsPainter(this.days, this.percentage);
 
   @override
   void paint(Canvas canvas, Size size) {
-    Paint paint = Paint()
+    final mainPaint = Paint()
       ..color = Colors.blueAccent
-      ..strokeWidth = 20
-      ..strokeCap = StrokeCap.round;
-
+      ..strokeWidth = 20;
     final linePaint = Paint()
       ..color = Colors.grey.withOpacity(0.4)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
+    final axisLinePaint = Paint()
+      ..color = Colors.grey
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 2;
+    const numberTextStyle = TextStyle(
+      fontWeight: FontWeight.bold,
+      fontSize: 10,
+      color: Colors.black,
+    );
 
-    final lineWidth = size.width * 0.72 / 6;
-
-    double maxAmount = days[0].amountSpent;
-
+    double maxExpence = days[0].amountSpent;
     for (Day day in days) {
-      maxAmount = math.max(maxAmount, day.amountSpent);
+      maxExpence = math.max(maxExpence, day.amountSpent);
     }
 
+    final defaultPadding = size.width * 0.1;
+    final lineWidth = size.width - defaultPadding;
+    final lineHeight = size.height - defaultPadding;
+
+    // horizontal line
     canvas.drawLine(
-      Offset(size.width * 0.15, 10 + 4 / 5 * size.height),
-      Offset(size.width * 1, 10 + 4 / 5 * size.height),
-      Paint()
-        ..color = Colors.grey
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = 2,
+      Offset(20 + defaultPadding, lineHeight),
+      Offset(lineWidth, lineHeight),
+      axisLinePaint,
     );
+
+    // vertical line
     canvas.drawLine(
-      Offset(size.width * 0.15, 0),
-      Offset(size.width * 0.15, 10 + 4 / 5 * size.height),
-      Paint()
-        ..color = Colors.grey
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = 2,
+      Offset(20 + defaultPadding, 5 + defaultPadding),
+      Offset(20 + defaultPadding, lineHeight),
+      axisLinePaint,
     );
-
-    drawText(
-      canvas,
-      Offset(size.width * 0.05, 10 + 4 * size.height / 5),
-      '0',
-      const TextStyle(
-        fontWeight: FontWeight.bold,
-        fontSize: 15,
-        color: Colors.black,
-      ),
-      double.infinity,
-    );
-
-    for (int i = 0; i < 8; i++) {
-      drawHorizontalDashedLines(
-        canvas,
-        Offset(size.width * 0.15, 10 + i * size.height / 10),
-        size,
-        linePaint,
-      );
-
-      final barMaxAmount = maxAmount.round() - maxAmount.round() % 10;
-
+    // draw 10 lines from default padding to size.height - default padding
+    final barMaxAmount = maxExpence.round() - maxExpence.round() % 10 + 10;
+    for (int i = 0; i < 7; i++) {
       drawText(
         canvas,
-        Offset(size.width * 0.05, 10 + i * size.height / 10),
-        (barMaxAmount - i * barMaxAmount / 8).toStringAsFixed(2),
-        const TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 13,
-          color: Colors.black,
-        ),
+        Offset(defaultPadding - 10, (i + 1) * (lineHeight / 8)),
+        (barMaxAmount - i * barMaxAmount / 7).toStringAsFixed(2),
+        numberTextStyle,
         double.infinity,
       );
+      drawDashedHorizontalLines(defaultPadding, lineWidth, canvas, i, lineHeight, axisLinePaint);
     }
-    for (int i = 0; i < days.length; i++) {
-      final lineHeight = size.height * (1 - percentage * (days[i].amountSpent) / maxAmount);
-      canvas.drawLine(
-        Offset(size.width * 0.2 + i * lineWidth, size.height * 0.8),
-        Offset(size.width * 0.2 + i * lineWidth, 0.8 * lineHeight),
-        paint,
-      );
-
-      drawVerticalDashedLines(
-        canvas,
-        Offset(7 + (i + 2) * lineWidth, size.height),
-        size,
-        linePaint,
-      );
-
+    drawText(
+      canvas,
+      Offset(defaultPadding - 10, defaultPadding + lineHeight - defaultPadding),
+      '0',
+      numberTextStyle,
+      double.infinity,
+    );
+    for (int i = 0; i < 7; i++) {
       drawText(
         canvas,
-        Offset(size.width * 0.2 + i * lineWidth, size.height * 0.9),
+        Offset(5 + defaultPadding * 2 + i * (lineWidth - 20) / 8, lineHeight + defaultPadding / 2),
         englishToArabic[days[i].name]!,
         const TextStyle(
           color: Colors.black,
-          fontWeight: FontWeight.w600,
+          fontWeight: FontWeight.bold,
           fontSize: 12,
         ),
         lineWidth + 100,
       );
+
+      final p = percentage * double.parse((days[i].amountSpent / barMaxAmount).toStringAsFixed(2));
+
+      final barEndPoint = lineHeight - p * ((lineHeight - defaultPadding - 5));
+
+      canvas.drawLine(
+        Offset(4 + defaultPadding * 2 + i * (lineWidth - 20) / 8, lineHeight),
+        Offset(4 + defaultPadding * 2 + i * (lineWidth - 20) / 8, barEndPoint),
+        mainPaint,
+      );
+
+      drawDashedVerticalLines(defaultPadding, lineWidth, canvas, i, lineHeight, axisLinePaint);
     }
   }
 
-  void drawVerticalDashedLines(Canvas canvas, Offset position, Size size, Paint paint) {
-    // Chage to your preferred size
-    const int dashWidth = 3;
-    const int dashSpace = 5;
-
-    // Start to draw from left size.
-    // Of course, you can change it to match your requirement.
-    double startY = 10;
-    double x = position.dx;
-
-    // Repeat drawing until we reach the right edge.
-    // In our example, size.with = 300 (from the SizedBox)
-    while (startY < size.height * 0.83) {
-      // Draw a small line.
-      canvas.drawLine(Offset(x, startY), Offset(x, startY + dashWidth), paint);
-
-      // Update the starting y
-      startY += dashWidth + dashSpace;
+  void drawDashedHorizontalLines(double defaultPadding, double lineWidth, Canvas canvas, int i, double lineHeight, Paint axisLinePaint) {
+    double start = 20 + defaultPadding;
+    double end = lineWidth;
+    double dashWidth = 4;
+    double dashSpace = 4;
+    while (start < end) {
+      canvas.drawLine(
+        Offset(start, (i + 1) * (lineHeight / 8)),
+        Offset(start + dashWidth, (i + 1) * (lineHeight / 8)),
+        axisLinePaint,
+      );
+      start += dashSpace + dashWidth;
     }
   }
 
-  void drawHorizontalDashedLines(Canvas canvas, Offset position, Size size, Paint paint) {
-    // Chage to your preferred size
-    const int dashWidth = 5;
-    const int dashSpace = 5;
-
-    // Start to draw from left size.
-    // Of course, you can change it to match your requirement.
-    double startX = position.dx;
-    double y = position.dy;
-
-    // Repeat drawing until we reach the right edge.
-    // In our example, size.with = 300 (from the SizedBox)
-    while (startX < size.width * 0.995) {
-      // Draw a small line.
-      canvas.drawLine(Offset(startX, y), Offset(startX + dashWidth, y), paint);
-
-      // Update the starting X
-      startX += dashWidth + dashSpace;
+  void drawDashedVerticalLines(double defaultPadding, double lineWidth, Canvas canvas, int i, double lineHeight, Paint axisLinePaint) {
+    double start = defaultPadding + 4;
+    double end = lineHeight;
+    double dashWidth = 4;
+    double dashSpace = 4;
+    while (start < end) {
+      canvas.drawLine(
+        Offset(lineWidth - i * ((lineWidth - 20) / 8), start),
+        Offset(lineWidth - i * ((lineWidth - 20) / 8), start + dashWidth),
+        axisLinePaint,
+      );
+      start += dashSpace + dashWidth;
     }
   }
 
@@ -198,13 +175,7 @@ class BarsPainter extends CustomPainter {
     return textPainter;
   }
 
-  void drawText(
-    Canvas canvas,
-    Offset position,
-    String text,
-    TextStyle style,
-    double maxWidth,
-  ) {
+  void drawText(Canvas canvas, Offset position, String text, TextStyle style, double maxWidth) {
     final tp = measureText(text, style, maxWidth, TextAlign.center);
     final pos = position + Offset(-tp.width / 2.0, -tp.height / 2.0);
     tp.paint(canvas, pos);
