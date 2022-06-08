@@ -1,10 +1,6 @@
+import 'package:ezan_official/constants.dart';
 import 'package:ezan_official/models/transactions.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
-
-final daysProvider = Provider(
-  (ref) => Days(),
-);
 
 class Day {
   final String name;
@@ -14,30 +10,37 @@ class Day {
 }
 
 class Days {
-  Future<List<Day>> getDayAmountSpent() async {
-    List<Day> days = [];
-    String currentday = DateFormat('EEEE').format(DateTime.now());
-    String today = DateFormat('EEEE').format(DateTime.now());
+  final List<Transaction> transactions;
 
-    final transactions = await Transactions.fetchTransactions();
+  Days(this.transactions);
+  List<Day> _days = demoDays;
+  List<Day> get days => [..._days];
+
+  void getDayAmountSpent() {
+    String currentDay = DateFormat('EEEE').format(DateTime.now());
+
+    final today = DateFormat('EEEE').format(DateTime.now());
+
     final transactionsCount = transactions.length;
     double amount = 0.0;
+
     for (int i = 0; i < transactionsCount; i++) {
       final transactionDay = DateFormat('EEEE').format(transactions[i].date);
-      if (transactionDay == currentday) {
+
+      if (transactionDay == currentDay) {
         amount += transactions[i].amount!;
       } else {
-        days.insert(0, Day(currentday, amount));
+        _days.insert(0, Day(currentDay, amount));
         amount = 0.0;
         i--;
-        currentday = transactionDay;
+        currentDay = transactionDay;
       }
 
-      if (currentday == today) {
+      if (currentDay == today && _days.isNotEmpty) {
         break;
       }
     }
 
-    return days.reversed.toList();
+    _days = _days.reversed.toList();
   }
 }

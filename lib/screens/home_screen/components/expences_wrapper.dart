@@ -1,8 +1,8 @@
-import 'package:ezan_official/models/bar_chart_days.dart';
-import 'package:ezan_official/models/categories.dart';
+import 'package:animations/animations.dart';
 import 'package:ezan_official/screens/home_screen/components/chart_categories.dart';
 import 'package:ezan_official/screens/home_screen/components/expences_bar_chart.dart';
 import 'package:ezan_official/screens/home_screen/components/expences_pie_chart.dart';
+import 'package:ezan_official/providers.dart';
 import 'package:ezan_official/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -15,49 +15,65 @@ class ExpencesWrapper extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final categoriesData = ref.watch(categoriesProvider);
     final daysData = ref.watch(daysProvider);
-    final categoriesFuture = useMemoized(categoriesData.getCategories);
-    final categories = useFuture(categoriesFuture);
-    final totalFuture = useMemoized(categoriesData.getTotal);
-    final total = useFuture(totalFuture);
-    final daysFuture = useMemoized(daysData.getDayAmountSpent);
-    final days = useFuture(daysFuture);
-    final isLoaded = categories.hasData && total.hasData && days.hasData;
-
     final showPieChartNotifier = useState(true);
 
+    // return Container();
     return AnimatedContainer(
       duration: const Duration(milliseconds: 200),
+      // height: SizeConfig.height(547),
+      width: SizeConfig.screenWidth * 0.9,
       curve: Curves.ease,
       alignment: Alignment.center,
-      // height: SizeConfig.screenHeight * (showPieChartNotifier.value ? .35 : .43),
-      width: SizeConfig.screenWidth * 0.9,
-      // padding: EdgeInsets.only(top: SizeConfig.height(40)),
+      // padding: const EdgeInsets.all(1),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
-        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 0, spreadRadius: 1)],
+        border: Border.all(color: Colors.black12),
       ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          isLoaded
-              ? GestureDetector(
-                  onTap: () async {
-                    showPieChartNotifier.value = !showPieChartNotifier.value;
-                  },
-                  child: !showPieChartNotifier.value
-                      ? ExpencesBarChart(items: days.data!)
-                      : ExpencesPieChart(items: categories.data!, total: total.data!),
-                )
-              : Container(
-                  alignment: Alignment.center,
-                  height: SizeConfig.screenWidth * 0.6,
-                  width: SizeConfig.screenWidth * 0.6,
-                  child: const CircularProgressIndicator(),
-                ),
-          // if (showPieChartNotifier.value) SizeConfig.addVerticalSpace(60),
-          if (isLoaded && showPieChartNotifier.value) ChartsCategories(items: categories.data!, total: total.data!),
-        ],
+      child: categoriesData.when(
+        data: (categoriesData) {
+          return daysData.when(
+            data: (daysData) {
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      showPieChartNotifier.value = !showPieChartNotifier.value;
+                    },
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
+                      child: PageTransitionSwitcher(
+                        duration: const Duration(milliseconds: 1000),
+                        transitionBuilder: (child, primaryAnimation, secondaryAnimation) {
+                          return FadeThroughTransition(
+                            fillColor: Colors.white,
+                            animation: primaryAnimation,
+                            secondaryAnimation: secondaryAnimation,
+                            child: child,
+                          );
+                        },
+                        child: !showPieChartNotifier.value
+                            ? ExpencesPieChart(items: categoriesData.categories, total: categoriesData.total)
+                            : ExpencesBarChart(items: daysData.days),
+                      ),
+                    ),
+                  ),
+                  SizeConfig.addVerticalSpace(20),
+                  ChartsCategories(items: categoriesData.categories, total: categoriesData.total),
+                ],
+              );
+            },
+            error: (e, s) => Center(child: Text('error: $e stack: $s')),
+            loading: () {
+              return const Center(child: CircularProgressIndicator());
+            },
+          );
+        },
+        error: (e, s) => Center(child: Text('error: $e')),
+        loading: () {
+          return const Center(child: CircularProgressIndicator());
+        },
       ),
     );
   }

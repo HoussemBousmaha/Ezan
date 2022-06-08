@@ -1,7 +1,11 @@
-import 'package:ezan_official/models/categories.dart';
+import 'dart:math' as math;
+
+import 'package:ezan_official/models/bar_chart_days.dart';
+import 'package:ezan_official/models/transactions.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 
 const daysNames = [
   'الأحد',
@@ -21,6 +25,39 @@ final Map<String, String> englishToArabic = {
   'Friday': 'الجمعة',
   'Saturday': 'السبت',
 };
+
+enum TransactionCategory {
+  electronics,
+  bills,
+  restaurants,
+  cafes,
+  shopping,
+  travel,
+}
+
+final demoTransactions = List.generate(
+  200,
+  (index) {
+    final randomAmount = math.Random().nextInt(100).toDouble();
+    final randomDate = DateTime.now().subtract(Duration(days: math.Random().nextInt(7)));
+    final randomCategory = TransactionCategory.values[math.Random().nextInt(
+      TransactionCategory.values.length,
+    )];
+    return Transaction(
+      id: index,
+      name: '',
+      date: randomDate,
+      amount: randomAmount,
+      category: randomCategory,
+    );
+  },
+);
+
+final demoDays = List.generate(7, (index) {
+  final randomAmount = math.Random().nextInt(100).toDouble();
+  final randomDate = DateFormat('EEEE').format(DateTime.now().subtract(Duration(days: math.Random().nextInt(7))));
+  return Day(randomDate, randomAmount);
+});
 
 final ThemeData theme = ThemeData(
   textTheme: GoogleFonts.madaTextTheme(),

@@ -38,18 +38,22 @@ class BarChartTransition extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: height,
-      builder: (context, child) {
-        return Container(
-          height: SizeConfig.screenWidth * 0.9,
-          width: SizeConfig.screenWidth * 0.9,
-          padding: const EdgeInsets.only(top: 0),
-          child: CustomPaint(
+    return Container(
+      height: SizeConfig.screenWidth * 0.9,
+      width: SizeConfig.screenWidth * 0.9,
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+      ),
+      padding: const EdgeInsets.only(top: 0),
+      child: AnimatedBuilder(
+        animation: height,
+        builder: (context, child) {
+          return CustomPaint(
             painter: BarsPainter(items, height.value),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }

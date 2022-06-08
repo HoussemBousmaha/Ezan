@@ -1,7 +1,7 @@
 import 'dart:math';
 
-import 'package:ezan_official/models/categories.dart';
-import 'package:ezan_official/services/sms_service.dart';
+import 'package:ezan_official/constants.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_sms_inbox/flutter_sms_inbox.dart';
 
 class Transaction {
@@ -17,6 +17,7 @@ class Transaction {
     required this.name,
     required this.date,
     this.amount,
+    this.category,
   });
 
   factory Transaction.smsToTransaction(SmsMessage message) {
@@ -28,11 +29,14 @@ class Transaction {
   }
 }
 
-class Transactions {
-  static Future<List<Transaction>> fetchTransactions() async {
-    final SmsService service = SmsService();
-    final messages = await service.getSmsMessages();
+class Transactions extends ChangeNotifier {
+  final List<SmsMessage> messages;
+  Transactions(this.messages);
 
+  List<Transaction> _state = demoTransactions;
+  List<Transaction> get state => [..._state];
+
+  void getTransactions() {
     final filteredTransactions = messages.where((message) {
       return message.body!.contains('PoS Purchase') || message.body!.contains('شراء عبر نقاط البيع');
     }).toList();
@@ -48,6 +52,8 @@ class Transactions {
       return transaction;
     }).toList();
 
-    return purchases;
+    if (purchases.isNotEmpty) {
+      _state = purchases;
+    }
   }
 }

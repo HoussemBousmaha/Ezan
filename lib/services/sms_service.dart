@@ -1,18 +1,26 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_sms_inbox/flutter_sms_inbox.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-class SmsService {
+class SmsService extends ChangeNotifier {
   final SmsQuery query = SmsQuery();
 
-  Future<List<SmsMessage>> getSmsMessages([int? smsCount]) async {
+  List<SmsMessage> _state = [];
+  List<SmsMessage> get state => [..._state];
+
+  Future<void> getMessages([int? smsCount]) async {
     final permission = await Permission.sms.status;
 
     if (permission.isGranted) {
       final sms = await query.querySms(count: smsCount);
-      return sms;
+      _state = sms;
     } else {
       await Permission.sms.request();
-      return [];
     }
   }
 }
+
+final smsProvider = ChangeNotifierProvider<SmsService>(
+  (ref) => SmsService(),
+);

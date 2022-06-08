@@ -10,21 +10,18 @@ class AddBankButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {},
-      child: Material(
-        borderRadius: BorderRadius.circular(20),
-        elevation: 5,
-        child: Container(
-          height: SizeConfig.height(100),
-          width: SizeConfig.width(80),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: Icon(
-            Icons.add,
-            size: SizeConfig.height(30),
-            color: Colors.black,
-          ),
+      child: Container(
+        height: SizeConfig.height(100),
+        width: SizeConfig.width(80),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: Colors.black12),
+        ),
+        child: Icon(
+          Icons.add,
+          size: SizeConfig.height(30),
+          color: Colors.black,
         ),
       ),
     );

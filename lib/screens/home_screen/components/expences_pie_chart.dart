@@ -46,14 +46,18 @@ class PieChartTransition extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String totalTitle = total != 0.0 ? '${total.toStringAsFixed(2)} ريال' : '';
-    return AnimatedBuilder(
-      animation: angle,
-      builder: (context, child) {
-        return Container(
-          height: SizeConfig.screenWidth * 0.9,
-          width: SizeConfig.screenWidth * 0.9,
-          padding: const EdgeInsets.all(30),
-          child: CustomPaint(
+    return Container(
+      height: SizeConfig.screenWidth * 0.9,
+      width: SizeConfig.screenWidth * 0.9,
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+      ),
+      padding: EdgeInsets.all(SizeConfig.height(50)),
+      child: AnimatedBuilder(
+        animation: angle,
+        builder: (context, child) {
+          return CustomPaint(
             painter: PieChartPainter(items, total, angle.value),
             child: Container(
               alignment: Alignment.center,
@@ -61,14 +65,14 @@ class PieChartTransition extends StatelessWidget {
                 totalTitle,
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
-                  fontSize: 15,
+                  fontSize: 25,
                   color: Colors.black,
                 ),
               ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }
