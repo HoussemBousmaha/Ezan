@@ -14,8 +14,8 @@ class ExpencesBarChart extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = useAnimationController(duration: const Duration(milliseconds: 1500));
-    final anim = CurvedAnimation(parent: controller, curve: Curves.bounceOut);
+    final controller = useAnimationController(duration: const Duration(milliseconds: 800));
+    final anim = CurvedAnimation(parent: controller, curve: Curves.easeInOut);
 
     useEffect(() {
       controller.forward();

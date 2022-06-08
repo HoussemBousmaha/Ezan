@@ -102,7 +102,7 @@ class BarsPainter extends CustomPainter {
         numberTextStyle,
         double.infinity,
       );
-      drawDashedHorizontalLines(defaultPadding, lineWidth, canvas, i, lineHeight, axisLinePaint);
+      drawDashedHorizontalLines(defaultPadding, lineWidth, canvas, i, lineHeight, linePaint);
     }
     drawText(
       canvas,
@@ -134,7 +134,7 @@ class BarsPainter extends CustomPainter {
         mainPaint,
       );
 
-      drawDashedVerticalLines(defaultPadding, lineWidth, canvas, i, lineHeight, axisLinePaint);
+      drawDashedVerticalLines(defaultPadding, lineWidth, canvas, i, lineHeight, linePaint);
     }
   }
 

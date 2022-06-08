@@ -16,9 +16,9 @@ class ExpencesPieChart extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = useAnimationController(duration: const Duration(milliseconds: 2000));
+    final controller = useAnimationController(duration: const Duration(milliseconds: 800));
     // late final Animation<double> animation;
-    final curvedAnimation = CurvedAnimation(parent: controller, curve: Curves.bounceOut);
+    final curvedAnimation = CurvedAnimation(parent: controller, curve: Curves.easeInOut);
     final animation = Tween<double>(begin: 0.0, end: 360).animate(curvedAnimation);
 
     useEffect(() {
