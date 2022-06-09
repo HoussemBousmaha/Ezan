@@ -1,5 +1,5 @@
 import 'package:animations/animations.dart';
-import 'package:ezan_official/screens/home_screen/home_screen.dart';
+import 'package:ezan_official/screens/home_screen/home_wrapper.dart';
 import 'package:ezan_official/screens/loan_screen/loan_screen.dart';
 import 'package:ezan_official/size_config.dart';
 import 'package:ezan_official/widgets/bottom_nav_bar.dart';
@@ -14,10 +14,9 @@ class NavBarScreensWrapper extends HookConsumerWidget {
   const NavBarScreensWrapper({Key? key}) : super(key: key);
 
   static const screens = [
-    HomeScreen(),
+    HomeWrapper(),
     LoanScreen(),
     Scaffold(),
-    // BudgetScreenWrapper(),
     Scaffold(),
   ];
 
@@ -26,18 +25,26 @@ class NavBarScreensWrapper extends HookConsumerWidget {
     SizeConfig.init(context);
 
     return Scaffold(
-      body: PageTransitionSwitcher(
-        transitionBuilder: (child, primaryAnimation, secondaryAnimation) {
-          return FadeThroughTransition(
-            animation: primaryAnimation,
-            secondaryAnimation: secondaryAnimation,
-            child: child,
-          );
-        },
-        child: screens[ref.watch(navBarScreensIndexProvider)],
+      body: Stack(
+        children: [
+          PageTransitionSwitcher(
+            transitionBuilder: (child, primaryAnimation, secondaryAnimation) {
+              return FadeThroughTransition(
+                animation: primaryAnimation,
+                secondaryAnimation: secondaryAnimation,
+                child: child,
+              );
+            },
+            child: screens[ref.watch(navBarScreensIndexProvider)],
+          ),
+          const Positioned(
+            bottom: 0,
+            left: 0,
+            right: 0,
+            child: BottomNavBar(),
+          ),
+        ],
       ),
-      // body: screens[ref.watch(navBarScreensIndexProvider)],
-      bottomNavigationBar: const BottomNavBar(),
     );
   }
 }
