@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_sms_inbox/flutter_sms_inbox.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class SmsService extends ChangeNotifier {
@@ -20,7 +19,3 @@ class SmsService extends ChangeNotifier {
     }
   }
 }
-
-final smsProvider = ChangeNotifierProvider<SmsService>(
-  (ref) => SmsService(),
-);

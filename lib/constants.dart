@@ -35,17 +35,24 @@ enum TransactionCategory {
   travel,
 }
 
+const demoTransactionNames = [
+  'Riyadh AlRiyadh',
+  'Habib Co',
+  'Mishaal Hassan',
+  'Stc Pay',
+  'Ehsan',
+];
+
 final demoTransactions = List.generate(
   200,
   (index) {
     final randomAmount = math.Random().nextInt(100).toDouble();
     final randomDate = DateTime.now().subtract(Duration(days: math.Random().nextInt(7)));
-    final randomCategory = TransactionCategory.values[math.Random().nextInt(
-      TransactionCategory.values.length,
-    )];
+    final randomCategory = TransactionCategory.values[math.Random().nextInt(TransactionCategory.values.length)];
+    final randomName = demoTransactionNames[math.Random().nextInt(demoTransactionNames.length)];
     return Transaction(
       id: index,
-      name: '',
+      name: randomName,
       date: randomDate,
       amount: randomAmount,
       category: randomCategory,
@@ -55,7 +62,7 @@ final demoTransactions = List.generate(
 
 final demoDays = List.generate(7, (index) {
   final randomAmount = math.Random().nextInt(100).toDouble();
-  final randomDate = DateFormat('EEEE').format(DateTime.now().subtract(Duration(days: math.Random().nextInt(7))));
+  final randomDate = DateFormat('EEEE').format(DateTime.now().subtract(Duration(days: index)));
   return Day(randomDate, randomAmount);
 });
 

@@ -5,7 +5,7 @@ import 'package:ezan_official/services/sms_service.dart';
 import 'package:flutter_sms_inbox/flutter_sms_inbox.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-final categoriesProvider = FutureProvider.autoDispose((ref) async {
+final categoriesProvider = FutureProvider((ref) async {
   final smsService = ref.read(smsProvider);
   await smsService.getMessages();
 
@@ -23,7 +23,7 @@ final categoriesProvider = FutureProvider.autoDispose((ref) async {
   return categoriesData;
 });
 
-final daysProvider = FutureProvider.autoDispose((ref) async {
+final daysProvider = FutureProvider((ref) async {
   final smsService = ref.read(smsProvider);
   await smsService.getMessages();
 
@@ -40,4 +40,17 @@ final daysProvider = FutureProvider.autoDispose((ref) async {
 
 final transactionsProvider = ChangeNotifierProvider.family<Transactions, List<SmsMessage>>((ref, messages) {
   return Transactions(messages);
+});
+
+final smsProvider = ChangeNotifierProvider<SmsService>(
+  (ref) => SmsService(),
+);
+
+final transactionsFutureProvider = FutureProvider((ref) async {
+  final smsService = ref.read(smsProvider);
+  await smsService.getMessages();
+
+  final transactionsData = ref.read(transactionsProvider(smsService.state));
+  transactionsData.getTransactions();
+  return transactionsData.state;
 });

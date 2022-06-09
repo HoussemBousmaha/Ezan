@@ -38,6 +38,7 @@ class Transactions extends ChangeNotifier {
 
   void getTransactions() {
     final filteredTransactions = messages.where((message) {
+      print(message.sender);
       return message.body!.contains('PoS Purchase') || message.body!.contains('شراء عبر نقاط البيع');
     }).toList();
 

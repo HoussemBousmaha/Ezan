@@ -1,7 +1,7 @@
 // ignore_for_file: avoid_print
 
 import 'package:ezan_official/screens/home_screen/components/bank_accounts.dart';
-import 'package:ezan_official/screens/home_screen/components/expences_wrapper.dart';
+import 'package:ezan_official/screens/home_screen/components/charts_and_transactions.dart';
 import 'package:ezan_official/size_config.dart';
 import 'package:flutter/material.dart';
 
@@ -48,9 +48,8 @@ class HomeScreen extends StatelessWidget {
             SizeConfig.addVerticalSpace(45),
             const BankAccounts(),
             SizeConfig.addVerticalSpace(80),
-            const ExpencesWrapper(),
-            // const BarChart(),
-            SizeConfig.addVerticalSpace(200),
+            const ChartsAndTransactions(),
+            // SizeConfig.addVerticalSpace(200),
           ],
         ),
       ),
