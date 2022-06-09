@@ -57,34 +57,28 @@ class AddExpenceBottomSheet extends StatelessWidget {
               ),
             ),
             SizeConfig.addVerticalSpace(40),
-            // GestureDetector(
-            //   onTap: () {
-            //     if (formKey.currentState!.validate()) {
-            //       Navigator.of(context).pop();
-            //       ref.read(expencesProvider.notifier).modifyExpence(
-            //             selectedDayNotifier.value,
-            //             int.parse(controller.text),
-            //           );
-            //     }
-            //   },
-            //   child: Container(
-            //     height: SizeConfig.height(60),
-            //     width: SizeConfig.screenWidth * 0.6,
-            //     decoration: BoxDecoration(
-            //       color: Colors.blueAccent,
-            //       borderRadius: BorderRadius.circular(20),
-            //     ),
-            //     alignment: Alignment.center,
-            //     child: Text(
-            //       'إضافة مصروف',
-            //       style: TextStyle(
-            //         color: Colors.white,
-            //         fontWeight: FontWeight.bold,
-            //         fontSize: SizeConfig.height(20),
-            //       ),
-            //     ),
-            //   ),
-            // ),
+            GestureDetector(
+              onTap: () {
+                Navigator.of(context).pop();
+              },
+              child: Container(
+                height: SizeConfig.height(60),
+                width: SizeConfig.screenWidth * 0.6,
+                decoration: BoxDecoration(
+                  color: Colors.blueAccent,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                alignment: Alignment.center,
+                child: Text(
+                  'إضافة مصروف',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: SizeConfig.height(20),
+                  ),
+                ),
+              ),
+            ),
           ],
         );
       },
