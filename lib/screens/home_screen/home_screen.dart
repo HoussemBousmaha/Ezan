@@ -13,44 +13,48 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SizeConfig.init(context);
-    return SingleChildScrollView(
-      physics: _physics,
-      child: SizedBox(
-        width: double.infinity,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            SizeConfig.addVerticalSpace(60),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: SizeConfig.width(30)),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  IconButton(
-                    icon: Icon(
-                      Icons.settings,
-                      size: SizeConfig.height(30),
-                      color: Colors.blueAccent,
+    return Scaffold(
+      body: SingleChildScrollView(
+        physics: _physics,
+        child: SizedBox(
+          width: double.infinity,
+          // height: double.infinity,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SizeConfig.addVerticalSpace(80),
+              SizedBox(
+                width: SizeConfig.width(364),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    IconButton(
+                      icon: Icon(
+                        Icons.settings,
+                        size: SizeConfig.height(30),
+                        color: Colors.blueAccent,
+                      ),
+                      onPressed: () {},
                     ),
-                    onPressed: () {},
-                  ),
-                  IconButton(
-                    icon: Icon(
-                      Icons.notifications,
-                      size: SizeConfig.height(30),
-                      color: Colors.blueAccent,
-                    ),
-                    onPressed: () {},
-                  )
-                ],
+                    IconButton(
+                      icon: Icon(
+                        Icons.notifications,
+                        size: SizeConfig.height(30),
+                        color: Colors.blueAccent,
+                      ),
+                      onPressed: () {},
+                    )
+                  ],
+                ),
               ),
-            ),
-            SizeConfig.addVerticalSpace(45),
-            const BankAccounts(),
-            SizeConfig.addVerticalSpace(80),
-            const ChartsAndTransactions(),
-            // SizeConfig.addVerticalSpace(200),
-          ],
+              SizeConfig.addVerticalSpace(45),
+              const BankAccounts(),
+              SizeConfig.addVerticalSpace(80),
+              const ChartsAndTransactions(),
+              SizeConfig.addVerticalSpace(200),
+            ],
+          ),
         ),
       ),
     );

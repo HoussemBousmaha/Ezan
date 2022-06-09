@@ -1,5 +1,6 @@
 import 'package:ezan_official/models/transactions.dart';
 import 'package:ezan_official/screens/home_screen/components/transaction_card.dart';
+import 'package:ezan_official/screens/home_screen/home_wrapper.dart';
 import 'package:ezan_official/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -24,7 +25,9 @@ class LatestTransactionsList extends HookConsumerWidget {
             children: [
               const Text('العمليات الأخيرة', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22)),
               GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  ref.read(homeWrapperScreensIndexProvider.notifier).state = true;
+                },
                 child: const Text('عرض الكل', style: TextStyle(color: Colors.blue, fontSize: 15)),
               ),
             ],
