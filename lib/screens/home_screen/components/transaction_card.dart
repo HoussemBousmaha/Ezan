@@ -45,7 +45,7 @@ class TransactionCard extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(transaction.name, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 15)),
+                  Text(transaction.name!, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 15)),
                   Text('${categoriesNames[transaction.category]}'),
                 ],
               ),

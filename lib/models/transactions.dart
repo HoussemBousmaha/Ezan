@@ -1,21 +1,22 @@
 import 'dart:math' as math;
-import 'dart:developer' as developer;
 
 import 'package:ezan_official/constants.dart';
 import 'package:flutter_sms_inbox/flutter_sms_inbox.dart';
 
 class Transaction {
   final int id;
-  final String name;
   final DateTime date;
-  double? amount; // assigned from the sms message body using regexp.
-  TransactionCategory? category; // this is NULL if isIncome is True.
+  // assigned from the sms message body using regexp.
+  String? name;
+  double? amount;
+
+  TransactionCategory? category;
   bool isIncome = false;
 
   Transaction({
     required this.id,
-    required this.name,
     required this.date,
+    this.name,
     this.amount,
     this.category,
   });
@@ -41,20 +42,23 @@ class Transactions {
     }).toList();
 
     final purchases = filteredTransactions.map((message) {
-      developer.log(message.body!);
       final doubleRE = RegExp(r"-?(?:\d*\.)?\d+(?:[eE][+-]?\d+)?");
       final amount = double.parse(doubleRE.firstMatch(message.body!)?.group(0) ?? '0.0');
+
+      const start = 'From';
+      const end = 'on';
+
+      final startIndex = message.body!.indexOf(start);
+      final endIndex = message.body!.indexOf(end, startIndex + start.length);
+
+      final name = message.body!.substring(startIndex + start.length, endIndex).trim();
+
       final transaction = Transaction.smsToTransaction(message);
       transaction.amount = amount;
-      transaction.category = TransactionCategory.values[math.Random().nextInt(
-        TransactionCategory.values.length,
-      )];
+      transaction.name = name;
+      transaction.category = TransactionCategory.values[math.Random().nextInt(TransactionCategory.values.length)];
       return transaction;
     }).toList();
-
-    // if (purchases.isNotEmpty) {
-    //   _state = purchases;
-    // }
 
     state = purchases;
   }

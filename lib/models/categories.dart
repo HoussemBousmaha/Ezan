@@ -17,7 +17,7 @@ class Category {
 
   static Category fromTransaction(Transaction transaction) {
     return Category(
-      name: transaction.name,
+      name: transaction.name!,
       color: categoriesColors[transaction.category]!,
       icon: categoriesIcons[transaction.category]!,
     );

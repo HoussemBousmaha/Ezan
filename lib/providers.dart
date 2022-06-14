@@ -54,6 +54,12 @@ final transactionsFutureProvider = FutureProvider((ref) async {
 
   final transactionsData = ref.read(transactionsProvider(smsService.state));
   transactionsData.getTransactions();
+
+  // meaning we are on emulator
+  if (transactionsData.state.isEmpty) {
+    transactionsData.state = demoTransactions;
+  }
+
   await Future.delayed(const Duration(milliseconds: 1000));
   return transactionsData.state;
 });
