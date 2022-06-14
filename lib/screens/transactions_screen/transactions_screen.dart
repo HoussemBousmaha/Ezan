@@ -51,7 +51,7 @@ class TransactionsScreen extends HookConsumerWidget {
                   transactions.sort((a, b) => b.date.compareTo(a.date));
                   return ListView.builder(
                     physics: const BouncingScrollPhysics(),
-                    itemCount: 200,
+                    itemCount: transactions.isNotEmpty ? 200 : 0,
                     itemBuilder: ((context, index) {
                       return TransactionCard(transaction: transactions[index]);
                     }),

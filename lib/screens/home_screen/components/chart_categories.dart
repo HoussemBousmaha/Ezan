@@ -15,43 +15,41 @@ class ChartsCategories extends HookConsumerWidget {
       direction: Axis.horizontal,
       children: List.generate(
         items.length,
-        (index) => Padding(
-          padding: EdgeInsets.symmetric(vertical: SizeConfig.height(10)),
-          child: SizedBox(
-            width: SizeConfig.width(170),
-            child: Row(
-              children: [
-                Container(
-                  height: SizeConfig.height(30),
-                  width: SizeConfig.height(30),
-                  decoration: BoxDecoration(
-                    color: items[index].color.withOpacity(0.4),
-                    shape: BoxShape.circle,
-                  ),
-                  alignment: Alignment.center,
-                  child: Icon(
-                    items[index].icon.icon,
-                    size: SizeConfig.height(13),
-                    color: items[index].icon.color,
-                  ),
-                ),
-                SizeConfig.addHorizontalSpace(10),
-                Column(
-                  children: [
-                    Text(
-                      '${items[index].name} ${((items[index].amount / total) * 100).toStringAsFixed(1)}%',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.w600,
-                        fontSize: SizeConfig.height(14),
-                      ),
+        (index) {
+          return Padding(
+            padding: EdgeInsets.symmetric(vertical: SizeConfig.height(10)),
+            child: SizedBox(
+              width: SizeConfig.width(170),
+              child: Row(
+                children: [
+                  Container(
+                    height: SizeConfig.height(30),
+                    width: SizeConfig.height(30),
+                    decoration: BoxDecoration(
+                      color: items[index].color.withOpacity(0.4),
+                      shape: BoxShape.circle,
                     ),
-                  ],
-                ),
-              ],
+                    alignment: Alignment.center,
+                    child: Icon(
+                      items[index].icon.icon,
+                      size: SizeConfig.height(13),
+                      color: items[index].icon.color,
+                    ),
+                  ),
+                  SizeConfig.addHorizontalSpace(10),
+                  Text(
+                    '${items[index].name} ${((items[index].amount / (total != 0 ? total : 1)) * 100).toStringAsFixed(1)}%',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w600,
+                      fontSize: SizeConfig.height(14),
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ),
+          );
+        },
       ),
     );
   }

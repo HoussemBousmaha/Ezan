@@ -35,7 +35,7 @@ class LatestTransactionsList extends HookConsumerWidget {
         ),
         SizeConfig.addVerticalSpace(10),
         ...List.generate(
-          4,
+          transactionsData.isNotEmpty ? 4 : 0,
           (index) => TransactionCard(transaction: transactionsData[index]),
         ),
       ],

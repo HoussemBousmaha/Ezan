@@ -70,7 +70,7 @@ class BarsPainter extends CustomPainter {
       color: Colors.black,
     );
 
-    double maxExpence = days[0].amountSpent;
+    double maxExpence = 0;
     for (Day day in days) {
       maxExpence = math.max(maxExpence, day.amountSpent);
     }

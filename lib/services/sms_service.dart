@@ -1,8 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_sms_inbox/flutter_sms_inbox.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-class SmsService extends ChangeNotifier {
+class SmsService {
   final SmsQuery query = SmsQuery();
 
   List<SmsMessage> _state = [];

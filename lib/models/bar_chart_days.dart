@@ -1,4 +1,3 @@
-import 'package:ezan_official/constants.dart';
 import 'package:ezan_official/models/transactions.dart';
 import 'package:intl/intl.dart';
 
@@ -13,8 +12,7 @@ class Days {
   final List<Transaction> transactions;
 
   Days(this.transactions);
-  List<Day> _days = demoDays;
-  List<Day> get days => [..._days];
+  List<Day> days = [];
 
   void getDayAmountSpent() {
     String currentDay = DateFormat('EEEE').format(DateTime.now());
@@ -30,17 +28,16 @@ class Days {
       if (transactionDay == currentDay) {
         amount += transactions[i].amount!;
       } else {
-        _days.insert(0, Day(currentDay, amount));
+        days.insert(0, Day(currentDay, amount));
         amount = 0.0;
         i--;
         currentDay = transactionDay;
       }
 
-      if (currentDay == today && _days.isNotEmpty) {
+      if (currentDay == today && days.isNotEmpty) {
         break;
       }
     }
-
-    _days = _days.reversed.toList();
+    days = days.reversed.toList();
   }
 }

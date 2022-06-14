@@ -24,7 +24,7 @@ class Category {
   }
 }
 
-class Categories extends ChangeNotifier {
+class Categories {
   final List<Transaction> transactions;
   Categories(this.transactions);
 

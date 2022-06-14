@@ -14,8 +14,8 @@ class ChartsAndTransactions extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer(
       builder: (context, ref, child) {
-        final categoriesData = ref.watch(categoriesProvider);
-        final daysData = ref.watch(daysProvider);
+        final categoriesData = ref.watch(categoriesFutureProvider);
+        final daysData = ref.watch(daysFutureProvider);
         final transactionsData = ref.watch(transactionsFutureProvider);
 
         return categoriesData.when(

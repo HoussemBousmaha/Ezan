@@ -93,7 +93,8 @@ class PieChartPainter extends CustomPainter {
       ..strokeCap = StrokeCap.round
       ..style = PaintingStyle.stroke
       ..color = category.color;
-    final sweepAngle = category.amount / total * angle * math.pi / 180.0;
+    double sweepAngle = category.amount / (total != 0 ? total : 1.0) * angle * math.pi / 180.0;
+
     canvas.drawArc(rect, startAngle, sweepAngle, false, paint);
     return sweepAngle;
   }
